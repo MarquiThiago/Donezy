@@ -1,8 +1,8 @@
 import 'package:design_system/design_system_export.dart';
+import 'package:donezy_app/src/modules/note/presentation/pages/notes_page.dart';
+import 'package:donezy_app/src/modules/task/presentation/pages/task_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:memo_app/src/modules/note/presentation/pages/notes_page.dart';
-import 'package:memo_app/src/modules/task/presentation/pages/task_page.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});

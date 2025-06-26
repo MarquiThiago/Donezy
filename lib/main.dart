@@ -1,6 +1,16 @@
+import 'package:donezy_app/firebase_options.dart';
+import 'package:donezy_app/src/core/firebase/firebase_config.dart';
+import 'package:donezy_app/src/modules/home/app_shell.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:memo_app/src/modules/home/app_shell.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Inicializar Firebase
+  await FirebaseConfig.initializeFirebase();
+
   runApp(const AppShell());
 }

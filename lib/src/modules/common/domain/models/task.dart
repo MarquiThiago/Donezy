@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+// ignore: must_be_immutable
 class Task with EquatableMixin {
   Task({
     required this.uid,

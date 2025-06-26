@@ -3,7 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart'
     show FirebaseAuthException, FirebaseException;
 import 'package:flutter/services.dart';
-import 'package:memo_app/src/modules/common/domain/failure/failure.dart';
+import 'package:donezy_app/src/modules/common/domain/failure/failure.dart';
 
 abstract class GlobalExceptionHandle {
   static Failure handle(Object exception, [StackTrace? stackTrace]) {

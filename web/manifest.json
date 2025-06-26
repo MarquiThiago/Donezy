@@ -1,6 +1,6 @@
 {
-    "name": "memo_app",
-    "short_name": "memo_app",
+    "name": "donezy_app",
+    "short_name": "donezy_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "882705725137",
+    "project_id": "donezy-eee27",
+    "storage_bucket": "donezy-eee27.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882705725137:android:71095c04418378c60237f0",
+        "android_client_info": {
+          "package_name": "com.donezy.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMB3gW93hh_J2788E2DI_PgEvVvneMwiM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882705725137:android:490feb5acc9c4d640237f0",
+        "android_client_info": {
+          "package_name": "com.example.donezy_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMB3gW93hh_J2788E2DI_PgEvVvneMwiM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882705725137:android:26341c3de33eeb350237f0",
+        "android_client_info": {
+          "package_name": "com.example.donezy_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMB3gW93hh_J2788E2DI_PgEvVvneMwiM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
