@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
+import 'package:donezy_app/src/modules/common/infrastructure/exception/custom_exception.dart';
+import 'package:donezy_app/src/modules/common/infrastructure/exception/custom_exception_code.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     show FirebaseAuthException, FirebaseException;
 import 'package:flutter/services.dart';
@@ -8,6 +10,9 @@ import 'package:donezy_app/src/modules/common/domain/failure/failure.dart';
 abstract class GlobalExceptionHandle {
   static Failure handle(Object exception, [StackTrace? stackTrace]) {
     return switch (exception.runtimeType) {
+      const (CustomException) => _handleCustomException(
+        exception as CustomException,
+      ),
       const (FirebaseException) => _handleFirebaseException(
         exception as FirebaseException,
       ),
@@ -20,6 +25,26 @@ abstract class GlobalExceptionHandle {
 
       _ => Failure.unexpected(object: exception),
     };
+  }
+
+  static Failure _handleCustomException(CustomException e) {
+    final Map<CustomExceptionCode, Failure> handle = {
+      CustomExceptionCode.platformNotSupported:
+          const Failure.platformNotSupported(),
+      CustomExceptionCode.unableToUploadImage:
+          const Failure.unableToUploadImage(),
+      CustomExceptionCode.noData: const Failure.noData(),
+      CustomExceptionCode.requestCanceled: const Failure.requestCanceled(),
+      CustomExceptionCode.invalidCredential: const Failure.invalidCredential(),
+      CustomExceptionCode.userNotFound: const Failure.userNotFound(),
+      CustomExceptionCode.notFound: const Failure.notFound(),
+      CustomExceptionCode.invalidPlatformOperation:
+          const Failure.invalidPlatformOperation(),
+      CustomExceptionCode.unexpected: const Failure.unexpected(),
+      CustomExceptionCode.unknown: const Failure.unexpected(),
+    };
+
+    return handle[e.code] ?? Failure.unexpected(object: e);
   }
 
   static Failure _handleFirebaseException(FirebaseException e) {

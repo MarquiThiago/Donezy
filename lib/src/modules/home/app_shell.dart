@@ -45,18 +45,6 @@ class _AppShellState extends State<AppShell> {
             ),
           ),
         ),
-        // CurvedNavigationBar(
-        //   backgroundColor: themeColor.surface,
-        //   color: themeColor.surfaceContainerHighest,
-        //   animationDuration: Duration(milliseconds: 200),
-        //   items: [
-        //     Icon(Icons.notes, color: Colors.black87),
-        //     Icon(Icons.task_alt, color: Colors.black87),
-        //   ],
-        //   onTap: (newIndex) => setState(() {
-        //     index = newIndex;
-        //   }),
-        // ),
       ),
     );
   }
