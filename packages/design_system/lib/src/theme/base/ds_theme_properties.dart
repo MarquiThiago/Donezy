@@ -2,22 +2,14 @@ part of 'ds_theme.dart';
 
 final _dsButtonStyle = ButtonStyle(
   shape: WidgetStateProperty.all(
-    const BeveledRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: DSProperty.radius,
-        bottomRight: DSProperty.radius,
-      ),
-    ),
+    RoundedRectangleBorder(borderRadius: BorderRadius.all(DSProperty.radius)),
   ),
   textStyle: WidgetStateProperty.all(
-    DSBaseTypography.baseTextTheme.headlineSmall,
-  ),
-  minimumSize: WidgetStateProperty.all(
-    const Size(
-      DSSize.materialTapTargetSize * 2,
-      DSSize.minButtonVisualHeight,
+    DSBaseTypography.baseTextTheme.headlineSmall?.copyWith(
+      fontWeight: FontWeight.bold,
     ),
   ),
+  minimumSize: WidgetStateProperty.all(const Size(double.infinity, 48)),
   tapTargetSize: MaterialTapTargetSize.padded,
   padding: WidgetStateProperty.all(
     const EdgeInsets.symmetric(
@@ -25,6 +17,7 @@ final _dsButtonStyle = ButtonStyle(
       vertical: DSSpace.small,
     ),
   ),
+  elevation: WidgetStateProperty.all(0),
 );
 final _dsInputDecoration = InputDecorationTheme(
   border: _dsInputBorder,

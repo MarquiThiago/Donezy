@@ -1,6 +1,6 @@
 import 'package:design_system/design_system_export.dart';
+import 'package:donezy_app/src/modules/auth/presentation/pages/login_page.dart';
 import 'package:donezy_app/src/modules/note/presentation/pages/notes_page.dart';
-import 'package:donezy_app/src/modules/task/presentation/pages/task_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
@@ -12,18 +12,17 @@ class AppShell extends StatefulWidget {
 }
 
 class _AppShellState extends State<AppShell> {
-  final List<Widget> pages = const [NotesPage(), TaskPage()];
+  final List<Widget> pages = const [NotesPage(), LoginPage()];
   int index = 0;
 
   @override
   Widget build(BuildContext context) {
     final themeColor = Theme.of(context).colorScheme;
     return MaterialApp(
-      theme: DSTheme.lightThemeData,
+      theme: DSTheme.darkThemeData,
       home: Scaffold(
         body: pages[index],
         bottomNavigationBar: Material(
-          color: themeColor.surface,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: DSSpace.xLarge),
             child: GNav(
@@ -34,7 +33,7 @@ class _AppShellState extends State<AppShell> {
               ),
               gap: DSSpace.xSmall,
               tabMargin: EdgeInsets.symmetric(horizontal: DSSpace.medium),
-              tabBackgroundColor: themeColor.primaryFixedDim,
+              tabBackgroundColor: Colors.indigoAccent,
               tabs: [
                 GButton(icon: Icons.notes, text: 'Notes'),
                 GButton(icon: Icons.task, text: 'Tasks'),
