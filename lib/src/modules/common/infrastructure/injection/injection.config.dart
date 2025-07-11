@@ -38,10 +38,13 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final firebaseInjectableModules = _$FirebaseInjectableModules();
+    gh.singleton<_i59.FirebaseAuth>(
+      () => firebaseInjectableModules.firebaseAuth,
+    );
     gh.lazySingleton<_i974.FirebaseFirestore>(
       () => firebaseInjectableModules.firestore,
     );
-    gh.lazySingleton<_i254.AuthRepository>(
+    gh.singleton<_i254.AuthRepository>(
       () => _i836.AuthRepositoryImpl(
         gh<_i59.FirebaseAuth>(),
         gh<_i974.FirebaseFirestore>(),
@@ -53,19 +56,19 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i946.SignInWithEmailAndPasswordUseCase>(
       () => _i946.SignInWithEmailAndPasswordUseCase(gh<_i254.AuthRepository>()),
     );
-    gh.factory<_i398.WatchAuthStatusUseCase>(
-      () => _i398.WatchAuthStatusUseCase(gh<_i254.AuthRepository>()),
-    );
     gh.factory<_i744.SignUpWithEmailAndPasswordUseCase>(
       () => _i744.SignUpWithEmailAndPasswordUseCase(gh<_i254.AuthRepository>()),
     );
     gh.factory<_i648.SignOutUseCase>(
       () => _i648.SignOutUseCase(gh<_i254.AuthRepository>()),
     );
+    gh.singleton<_i398.WatchAuthStatusUseCase>(
+      () => _i398.WatchAuthStatusUseCase(gh<_i254.AuthRepository>()),
+    );
     gh.factory<_i477.SignUpBloc>(
       () => _i477.SignUpBloc(gh<_i744.SignUpWithEmailAndPasswordUseCase>()),
     );
-    gh.factory<_i478.WatchAuthBloc>(
+    gh.singleton<_i478.WatchAuthBloc>(
       () => _i478.WatchAuthBloc(gh<_i398.WatchAuthStatusUseCase>()),
     );
     gh.factory<_i622.SignOutBloc>(

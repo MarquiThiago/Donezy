@@ -1,4 +1,5 @@
 import 'package:design_system/design_system_export.dart';
+import 'package:donezy_app/src/modules/common/domain/const/const_strings.dart';
 import 'package:flutter/material.dart';
 
 class NotesPage extends StatelessWidget {
@@ -9,14 +10,15 @@ class NotesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Text("Take Notes"),
+        title: Text(ConstStrings.takeNotes),
         elevation: 0,
       ),
       body: ListView.separated(
         padding: EdgeInsets.all(DSSpace.small),
         separatorBuilder: (context, index) => DSBoxSpace.small(),
         itemCount: 20,
-        itemBuilder: (context, index) => ListTile(title: Text('data')),
+        itemBuilder: (context, index) =>
+            ListTile(title: Text(ConstStrings.data)),
       ),
     );
   }

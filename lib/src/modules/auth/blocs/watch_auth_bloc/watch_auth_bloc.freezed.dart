@@ -45,8 +45,8 @@ $WatchAuthEventCopyWith(WatchAuthEvent _, $Res Function(WatchAuthEvent) __);
 /// @nodoc
 
 
-class _WatchAuthStatus implements WatchAuthEvent {
-  const _WatchAuthStatus();
+class _Start implements WatchAuthEvent {
+  const _Start();
   
 
 
@@ -56,7 +56,7 @@ class _WatchAuthStatus implements WatchAuthEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WatchAuthStatus);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Start);
 }
 
 
@@ -65,7 +65,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'WatchAuthEvent.watchAuthStatus()';
+  return 'WatchAuthEvent.start()';
 }
 
 
@@ -73,6 +73,72 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class _Update implements WatchAuthEvent {
+  const _Update(this.result);
+  
+
+ final  Either<Failure, AuthStatus> result;
+
+/// Create a copy of WatchAuthEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UpdateCopyWith<_Update> get copyWith => __$UpdateCopyWithImpl<_Update>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Update&&(identical(other.result, result) || other.result == result));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,result);
+
+@override
+String toString() {
+  return 'WatchAuthEvent.update(result: $result)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UpdateCopyWith<$Res> implements $WatchAuthEventCopyWith<$Res> {
+  factory _$UpdateCopyWith(_Update value, $Res Function(_Update) _then) = __$UpdateCopyWithImpl;
+@useResult
+$Res call({
+ Either<Failure, AuthStatus> result
+});
+
+
+
+
+}
+/// @nodoc
+class __$UpdateCopyWithImpl<$Res>
+    implements _$UpdateCopyWith<$Res> {
+  __$UpdateCopyWithImpl(this._self, this._then);
+
+  final _Update _self;
+  final $Res Function(_Update) _then;
+
+/// Create a copy of WatchAuthEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? result = null,}) {
+  return _then(_Update(
+null == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
+as Either<Failure, AuthStatus>,
+  ));
+}
+
+
+}
 
 /// @nodoc
 mixin _$WatchAuthState {

@@ -4,7 +4,7 @@ import 'package:donezy_app/src/modules/auth/domain/auth_status.dart';
 import 'package:donezy_app/src/modules/common/domain/failure/failure.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@singleton
 class WatchAuthStatusUseCase {
   const WatchAuthStatusUseCase(this._authRepository);
 

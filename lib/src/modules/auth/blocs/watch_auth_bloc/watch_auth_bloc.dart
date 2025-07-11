@@ -13,40 +13,39 @@ part 'watch_auth_event.dart';
 part 'watch_auth_state.dart';
 part 'watch_auth_bloc.freezed.dart';
 
-@injectable
+@singleton
 class WatchAuthBloc extends Bloc<WatchAuthEvent, WatchAuthState> {
   WatchAuthBloc(this._watchAuthStatusUseCase)
     : super(const WatchAuthState.initial()) {
     on<WatchAuthEvent>(
       (event, emit) async => switch (event) {
-        _WatchAuthStatus() => _onWatchAuthStatus(event, emit),
+        _Start() => _onStart(event, emit),
+        _Update() => _onUpdate(event, emit),
       },
     );
+    add(const WatchAuthEvent.start());
   }
 
   final WatchAuthStatusUseCase _watchAuthStatusUseCase;
   late final StreamSubscription<Either<Failure, AuthStatus>>
   _authStatusSubscription;
 
-  Future<void> _onWatchAuthStatus(
-    _WatchAuthStatus event,
-    Emitter<WatchAuthState> emit,
-  ) async {
+  Future<void> _onStart(_Start event, Emitter<WatchAuthState> emit) async {
     emit(const WatchAuthState.loading());
+    _authStatusSubscription = _watchAuthStatusUseCase.call().listen((result) {
+      add(WatchAuthEvent.update(result));
+    });
+  }
 
-    _authStatusSubscription = _watchAuthStatusUseCase.call().listen(
-      (result) => result.fold(
-        (failure) => emit(WatchAuthState.failure(failure)),
-        (authStatus) => switch (authStatus) {
-          AuthStatusAuthenticated(userUid: final userUid) => emit(
-            WatchAuthState.authenticated(userUid: userUid),
-          ),
-          AuthStatusUnauthenticated() => emit(
-            const WatchAuthState.unauthenticated(),
-          ),
-          _ => emit(const WatchAuthState.unauthenticated()),
-        },
-      ),
+  Future<void> _onUpdate(_Update event, Emitter<WatchAuthState> emit) async {
+    event.result.fold(
+      (failure) => emit(WatchAuthState.failure(failure)),
+      (authStatus) => switch (authStatus) {
+        AuthStatusAuthenticated(userUid: final userUid) => emit(
+          WatchAuthState.authenticated(userUid: userUid),
+        ),
+        _ => emit(const WatchAuthState.unauthenticated()),
+      },
     );
   }
 

@@ -13,7 +13,7 @@ import 'package:donezy_app/src/modules/common/infrastructure/exception_handle.da
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 
-@LazySingleton(as: AuthRepository)
+@Singleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._firebaseAuth, this._firestore) {
     unawaited(_init());
@@ -22,7 +22,7 @@ class AuthRepositoryImpl implements AuthRepository {
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
 
-  late final StreamSubscription<User?>? _authStateSubscription;
+  StreamSubscription<User?>? _authStateSubscription;
   final StreamController<Either<Failure, AuthStatus>> _controller =
       StreamController.broadcast();
 

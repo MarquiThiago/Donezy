@@ -1,3 +1,4 @@
+import 'package:donezy_app/src/modules/common/domain/const/const_strings.dart';
 import 'package:flutter/material.dart';
 
 class TaskPage extends StatelessWidget {
@@ -8,7 +9,7 @@ class TaskPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Text("Make Tasks"),
+        title: Text(ConstStrings.makeTasks),
         elevation: 0,
       ),
     );

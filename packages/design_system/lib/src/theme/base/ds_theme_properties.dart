@@ -14,7 +14,7 @@ final _dsButtonStyle = ButtonStyle(
   padding: WidgetStateProperty.all(
     const EdgeInsets.symmetric(
       horizontal: DSSpace.medium,
-      vertical: DSSpace.small,
+      vertical: DSSpace.medium,
     ),
   ),
   elevation: WidgetStateProperty.all(0),

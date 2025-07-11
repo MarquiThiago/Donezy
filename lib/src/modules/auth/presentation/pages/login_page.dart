@@ -1,8 +1,24 @@
 import 'package:design_system/design_system_export.dart';
+import 'package:donezy_app/src/modules/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
+import 'package:donezy_app/src/modules/auth/blocs/sign_up_bloc/sign_up_bloc.dart';
+import 'package:donezy_app/src/modules/auth/domain/input_validators/auth_validator.dart';
+import 'package:donezy_app/src/modules/auth/domain/input_validators/email_validator_translation.dart';
+import 'package:donezy_app/src/modules/auth/domain/input_validators/password_validator_translation.dart';
+import 'package:donezy_app/src/modules/common/domain/const/const_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -10,100 +26,131 @@ class LoginPage extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: DSSpace.xxLarge),
-            child: Column(
-              spacing: DSSpace.xLarge,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Icon(
-                  Icons.lock_outline_rounded,
-                  size: DSSize.iconSizeXXLarge,
-                  color: colorScheme.primary,
-                ),
-                Text(
-                  'Sign In',
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+        child: Form(
+          key: _formKey,
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: DSSpace.xxLarge),
+              child: Column(
+                spacing: DSSpace.xLarge,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Icon(
+                    Icons.lock_outline_rounded,
+                    size: DSSize.iconSizeXXLarge,
+                    color: colorScheme.primary,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Phone/Email Id',
-                    prefixIcon: Icon(Icons.email_outlined),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: const Icon(Icons.lock_outline),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.visibility_off_outlined),
-                      onPressed: () {},
+                  Text(
+                    ConstStrings.signIn,
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                  obscureText: true,
-                ),
-                ElevatedButton(onPressed: () {}, child: const Text('Sign In')),
-                Row(
-                  children: [
-                    const Expanded(child: Divider()),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: DSSpace.small,
+                  TextFormField(
+                    controller: _emailController,
+                    validator: (value) => AuthValidators.validateEmail(
+                      value,
+                    )?.first.translate(context),
+                    decoration: const InputDecoration(
+                      labelText: ConstStrings.phoneEmailId,
+                      prefixIcon: Icon(Icons.email_outlined),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  TextFormField(
+                    controller: _passwordController,
+                    validator: (value) => AuthValidators.validatePassword(
+                      value,
+                    )?.first.translate(context),
+                    decoration: InputDecoration(
+                      labelText: ConstStrings.password,
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.visibility_off_outlined),
+                        onPressed: () {},
                       ),
-                      child: Text('OR', style: theme.textTheme.labelLarge),
                     ),
-                    const Expanded(child: Divider()),
-                  ],
-                ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     _SocialIconButton(
-                //       icon: Icons.close, // X (Twitter)
-                //       onTap: () {},
-                //     ),
-                //     const SizedBox(width: DSSpace.large),
-                //     _SocialIconButton(
-                //       icon: Icons.facebook,
-                //       color: Colors.blue[800],
-                //       onTap: () {},
-                //     ),
-                //     const SizedBox(width: DSSpace.large),
-                //     _SocialIconButton(
-                //       icon: Icons.g_mobiledata,
-                //       color: Colors.red[700],
-                //       onTap: () {},
-                //     ),
-                //   ],
-                // ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('New to Donezy? ', style: theme.textTheme.bodyMedium),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Text(
-                        'Register',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.primary,
-                          fontWeight: FontWeight.bold,
+                    obscureText: true,
+                  ),
+                  ElevatedButton(
+                    onPressed: () => _onLoginPressed(context),
+                    child: const Text(ConstStrings.signIn),
+                  ),
+                  Row(
+                    children: [
+                      const Expanded(child: Divider()),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: DSSpace.small,
+                        ),
+                        child: Text(
+                          ConstStrings.or,
+                          style: theme.textTheme.labelLarge,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      const Expanded(child: Divider()),
+                    ],
+                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     _SocialIconButton(
+                  //       icon: Icons.close, // X (Twitter)
+                  //       onTap: () {},
+                  //     ),
+                  //     const SizedBox(width: DSSpace.large),
+                  //     _SocialIconButton(
+                  //       icon: Icons.facebook,
+                  //       color: Colors.blue[800],
+                  //       onTap: () {},
+                  //     ),
+                  //     const SizedBox(width: DSSpace.large),
+                  //     _SocialIconButton(
+                  //       icon: Icons.g_mobiledata,
+                  //       color: Colors.red[700],
+                  //       onTap: () {},
+                  //     ),
+                  //   ],
+                  // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        ConstStrings.newToDonezy,
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Text(
+                          ConstStrings.register,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  void _onLoginPressed(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      context.read<SignUpBloc>().add(
+        SignUpEvent.signUpWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        ),
+      );
+    }
   }
 }
 

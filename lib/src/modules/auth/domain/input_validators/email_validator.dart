@@ -1,0 +1,1 @@
+enum EmailValidator { empty, invalidEmail }
