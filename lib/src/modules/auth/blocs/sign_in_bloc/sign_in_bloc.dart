@@ -36,15 +36,8 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       event.password,
     );
 
-    result.fold((failure) => emit(SignInState.failure(failure)), (
-      userCredential,
-    ) {
-      final user = userCredential.user;
-      if (user != null) {
-        emit(SignInState.authenticated(userUid: UserUid(user.uid)));
-      } else {
-        emit(const SignInState.failure(Failure.userNotFound()));
-      }
+    result.fold((failure) => emit(SignInState.failure(failure)), (userUid) {
+      emit(SignInState.authenticated(userUid: userUid));
     });
   }
 }

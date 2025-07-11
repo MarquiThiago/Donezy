@@ -22,30 +22,32 @@ class AppShell extends StatelessWidget {
       ],
       child: MaterialApp(
         theme: DSTheme.lightThemeData,
-        home: BlocConsumer<WatchAuthBloc, WatchAuthState>(
-          listener: (context, state) => switch (state) {
-            WatchAuthFailure() => ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  ConstStrings.error,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+        home: Scaffold(
+          body: BlocConsumer<WatchAuthBloc, WatchAuthState>(
+            listener: (context, state) => switch (state) {
+              WatchAuthFailure() => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    ConstStrings.error,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  backgroundColor: context.dSColor.error,
                 ),
-                backgroundColor: context.dSColor.error,
               ),
-            ),
-            _ => null,
-          },
-          builder: (context, state) => switch (state) {
-            Authenticated() => InitialScreen(),
-            Unauthenticated() => const LoginPage(),
-            WatchAuthInitial() => const SizedBox.shrink(),
-            WatchAuthLoading() => const Center(
-              child: CircularProgressIndicator.adaptive(),
-            ),
-            WatchAuthFailure() => const Center(
-              child: Text(ConstStrings.errorGettingAuthState),
-            ),
-          },
+              _ => null,
+            },
+            builder: (context, state) => switch (state) {
+              Authenticated() => InitialScreen(),
+              Unauthenticated() => const LoginPage(),
+              WatchAuthInitial() => const SizedBox.shrink(),
+              WatchAuthLoading() => const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+              WatchAuthFailure() => const Center(
+                child: Text(ConstStrings.errorGettingAuthState),
+              ),
+            },
+          ),
         ),
       ),
     );

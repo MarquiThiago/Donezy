@@ -1,5 +1,4 @@
 import 'package:design_system/design_system_export.dart';
-import 'package:donezy_app/src/modules/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:donezy_app/src/modules/auth/blocs/sign_up_bloc/sign_up_bloc.dart';
 import 'package:donezy_app/src/modules/auth/domain/input_validators/auth_validator.dart';
 import 'package:donezy_app/src/modules/auth/domain/input_validators/email_validator_translation.dart';

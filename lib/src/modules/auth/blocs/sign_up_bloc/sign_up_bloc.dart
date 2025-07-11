@@ -36,15 +36,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       event.password,
     );
 
-    result.fold((failure) => emit(SignUpState.failure(failure)), (
-      userCredential,
-    ) {
-      final user = userCredential.user;
-      if (user != null) {
-        emit(SignUpState.success(userUid: UserUid(user.uid)));
-      } else {
-        emit(const SignUpState.failure(Failure.userNotFound()));
-      }
+    result.fold((failure) => emit(SignUpState.failure(failure)), (userUid) {
+      emit(SignUpState.success(userUid: userUid));
     });
   }
 }

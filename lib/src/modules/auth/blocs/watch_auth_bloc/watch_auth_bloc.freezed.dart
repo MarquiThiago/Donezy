@@ -238,10 +238,10 @@ String toString() {
 
 
 class Authenticated implements WatchAuthState {
-  const Authenticated({required this.userUid});
+  const Authenticated({required this.user});
   
 
- final  UserUid userUid;
+ final  User user;
 
 /// Create a copy of WatchAuthState
 /// with the given fields replaced by the non-null parameter values.
@@ -253,16 +253,16 @@ $AuthenticatedCopyWith<Authenticated> get copyWith => _$AuthenticatedCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Authenticated&&(identical(other.userUid, userUid) || other.userUid == userUid));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Authenticated&&(identical(other.user, user) || other.user == user));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,userUid);
+int get hashCode => Object.hash(runtimeType,user);
 
 @override
 String toString() {
-  return 'WatchAuthState.authenticated(userUid: $userUid)';
+  return 'WatchAuthState.authenticated(user: $user)';
 }
 
 
@@ -273,7 +273,7 @@ abstract mixin class $AuthenticatedCopyWith<$Res> implements $WatchAuthStateCopy
   factory $AuthenticatedCopyWith(Authenticated value, $Res Function(Authenticated) _then) = _$AuthenticatedCopyWithImpl;
 @useResult
 $Res call({
- UserUid userUid
+ User user
 });
 
 
@@ -290,10 +290,10 @@ class _$AuthenticatedCopyWithImpl<$Res>
 
 /// Create a copy of WatchAuthState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? userUid = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? user = null,}) {
   return _then(Authenticated(
-userUid: null == userUid ? _self.userUid : userUid // ignore: cast_nullable_to_non_nullable
-as UserUid,
+user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as User,
   ));
 }
 

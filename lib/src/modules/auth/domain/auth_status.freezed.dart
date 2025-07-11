@@ -78,10 +78,10 @@ String toString() {
 
 
 class AuthStatusAuthenticated implements AuthStatus {
-  const AuthStatusAuthenticated({required this.userUid});
+  const AuthStatusAuthenticated({required this.user});
   
 
- final  UserUid userUid;
+ final  User user;
 
 /// Create a copy of AuthStatus
 /// with the given fields replaced by the non-null parameter values.
@@ -93,16 +93,16 @@ $AuthStatusAuthenticatedCopyWith<AuthStatusAuthenticated> get copyWith => _$Auth
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthStatusAuthenticated&&(identical(other.userUid, userUid) || other.userUid == userUid));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthStatusAuthenticated&&(identical(other.user, user) || other.user == user));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,userUid);
+int get hashCode => Object.hash(runtimeType,user);
 
 @override
 String toString() {
-  return 'AuthStatus.authenticated(userUid: $userUid)';
+  return 'AuthStatus.authenticated(user: $user)';
 }
 
 
@@ -113,7 +113,7 @@ abstract mixin class $AuthStatusAuthenticatedCopyWith<$Res> implements $AuthStat
   factory $AuthStatusAuthenticatedCopyWith(AuthStatusAuthenticated value, $Res Function(AuthStatusAuthenticated) _then) = _$AuthStatusAuthenticatedCopyWithImpl;
 @useResult
 $Res call({
- UserUid userUid
+ User user
 });
 
 
@@ -130,10 +130,10 @@ class _$AuthStatusAuthenticatedCopyWithImpl<$Res>
 
 /// Create a copy of AuthStatus
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? userUid = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? user = null,}) {
   return _then(AuthStatusAuthenticated(
-userUid: null == userUid ? _self.userUid : userUid // ignore: cast_nullable_to_non_nullable
-as UserUid,
+user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as User,
   ));
 }
 
