@@ -1,27 +1,29 @@
 import 'package:design_system/design_system_export.dart';
-import 'package:donezy_app/src/modules/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
+import 'package:donezy_app/src/modules/auth/blocs/sign_up_bloc/sign_up_bloc.dart';
 import 'package:donezy_app/src/modules/auth/domain/input_validators/auth_validator.dart';
 import 'package:donezy_app/src/modules/auth/domain/input_validators/email_validator_translation.dart';
 import 'package:donezy_app/src/modules/auth/domain/input_validators/password_validator_translation.dart';
-import 'package:donezy_app/src/modules/auth/presentation/pages/register_page.dart';
+import 'package:donezy_app/src/modules/auth/presentation/pages/login_page.dart';
 import 'package:donezy_app/src/modules/common/domain/const/const_strings.dart';
 import 'package:donezy_app/src/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   bool _isPasswordVisible = true;
+  bool _isConfirmPasswordVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +42,12 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Icon(
-                    Icons.lock_outline_rounded,
+                    Icons.person_add_alt_1_rounded,
                     size: DSSize.iconSizeXXLarge,
                     color: colorScheme.primary,
                   ),
                   Text(
-                    ConstStrings.signIn,
+                    ConstStrings.register,
                     style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -83,57 +85,45 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () => _onLoginPressed(context),
-                    child: const Text(ConstStrings.signIn),
-                  ),
-                  Row(
-                    children: [
-                      const Expanded(child: Divider()),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: DSSpace.small,
+                  TextFormField(
+                    obscureText: _isConfirmPasswordVisible,
+                    controller: _confirmPasswordController,
+                    validator: (value) =>
+                        AuthValidators.validateConfirmPassword(
+                          value,
+                          _passwordController.text,
+                        )?.first.translate(context),
+                    decoration: InputDecoration(
+                      labelText: ConstStrings.confirmPassword,
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isConfirmPasswordVisible
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
                         ),
-                        child: Text(
-                          ConstStrings.or,
-                          style: theme.textTheme.labelLarge,
-                        ),
+                        onPressed: () => setState(() {
+                          _isConfirmPasswordVisible =
+                              !_isConfirmPasswordVisible;
+                        }),
                       ),
-                      const Expanded(child: Divider()),
-                    ],
+                    ),
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     _SocialIconButton(
-                  //       icon: Icons.close, // X (Twitter)
-                  //       onTap: () {},
-                  //     ),
-                  //     const SizedBox(width: DSSpace.large),
-                  //     _SocialIconButton(
-                  //       icon: Icons.facebook,
-                  //       color: Colors.blue[800],
-                  //       onTap: () {},
-                  //     ),
-                  //     const SizedBox(width: DSSpace.large),
-                  //     _SocialIconButton(
-                  //       icon: Icons.g_mobiledata,
-                  //       color: Colors.red[700],
-                  //       onTap: () {},
-                  //     ),
-                  //   ],
-                  // ),
+                  ElevatedButton(
+                    onPressed: () => _onRegisterPressed(context),
+                    child: const Text(ConstStrings.register),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        ConstStrings.newToDonezy,
+                        ConstStrings.alreadyHaveAnAccount,
                         style: theme.textTheme.bodyMedium,
                       ),
                       GestureDetector(
-                        onTap: () => context.go(AppRoutes.registerPath),
+                        onTap: () => context.go(AppRoutes.loginPath),
                         child: Text(
-                          ConstStrings.register,
+                          ConstStrings.signIn,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: colorScheme.primary,
                             fontWeight: FontWeight.bold,
@@ -151,43 +141,17 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _onLoginPressed(BuildContext context) {
+  void _onRegisterPressed(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      context.read<SignInBloc>().add(
-        SignInEvent.signInWithEmailAndPassword(
+      context.read<SignUpBloc>().add(
+        SignUpEvent.signUpWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
         ),
       );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text(ConstStrings.register)));
     }
   }
 }
-
-// class _SocialIconButton extends StatelessWidget {
-//   final IconData icon;
-//   final Color? color;
-//   final VoidCallback onTap;
-
-//   const _SocialIconButton({
-//     required this.icon,
-//     required this.onTap,
-//     this.color,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return InkWell(
-//       borderRadius: BorderRadius.circular(24),
-//       onTap: onTap,
-//       child: Container(
-//         width: 48,
-//         height: 48,
-//         decoration: BoxDecoration(
-//           shape: BoxShape.circle,
-//           border: Border.all(color: Colors.grey.shade300),
-//         ),
-//         child: Icon(icon, color: color ?? Colors.black, size: 28),
-//       ),
-//     );
-//   }
-// }

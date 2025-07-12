@@ -1,11 +1,11 @@
 part of 'ds_theme.dart';
 
 final ColorScheme _dsDarkColorScheme = const ColorScheme.dark().copyWith(
-  primary: DSPaletteScheme.dark.primary,
+  primary: DSPaletteScheme.dark.primary.shade400,
   primaryContainer: DSPaletteScheme.dark.primary.shade800,
   secondary: DSPaletteScheme.dark.secondary.shade600,
   secondaryContainer: DSPaletteScheme.dark.secondary.shade900,
-  surface: DSPaletteScheme.dark.neutral.shade100,
+  surface: DSPaletteScheme.dark.neutral.shade50,
   surfaceContainerLow: DSPaletteScheme.dark.neutral.shade200,
   surfaceContainerLowest: DSPaletteScheme.dark.neutral.shade300,
   surfaceContainerHigh: DSPaletteScheme.dark.neutral.shade800,
@@ -167,9 +167,7 @@ final ThemeData _dsDarkThemeData = ThemeData.dark().copyWith(
       horizontal: DSSpace.medium,
       vertical: DSSpace.small,
     ),
-    shape: StadiumBorder(
-      side: BorderSide(color: DSPaletteScheme.dark.neutral),
-    ),
+    shape: StadiumBorder(side: BorderSide(color: DSPaletteScheme.dark.neutral)),
     side: BorderSide.none,
     showCheckmark: false,
     iconTheme: IconThemeData(
@@ -371,8 +369,5 @@ final ThemeData _dsDarkThemeData = ThemeData.dark().copyWith(
       ),
     ),
   ),
-  extensions: [
-    dsColorDark,
-    dsTypographyThemeDark,
-  ],
+  extensions: [dsColorDark, dsTypographyThemeDark],
 );

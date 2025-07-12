@@ -54,4 +54,14 @@ abstract class AuthValidators {
 
     return null;
   }
+
+  static List<PasswordValidator>? validateConfirmPassword(
+    String? password,
+    String? confirmPassword,
+  ) {
+    if (password != confirmPassword) {
+      return [PasswordValidator.notMatch];
+    }
+    return null;
+  }
 }

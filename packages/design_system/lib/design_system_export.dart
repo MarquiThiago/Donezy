@@ -15,3 +15,5 @@ export 'src/theme/ds_theme_controller.dart';
 export 'src/theme/extensions/ds_color.dart';
 export 'src/theme/extensions/ds_typography.dart';
 export 'src/components/box_space/ds_box_space.dart';
+export 'src/theme/ds_theme_mode.dart';
+export 'src/theme/ds_theme_mode_state.dart';

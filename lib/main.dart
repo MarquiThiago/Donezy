@@ -12,8 +12,7 @@ void main() async {
 
   // Inicializar Firebase
   await FirebaseConfig.initializeFirebase();
+  configureInjection();
 
   runApp(const AppShell());
-
-  configureInjection();
 }

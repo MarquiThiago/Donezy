@@ -4,5 +4,6 @@ enum PasswordValidator {
   noUppercase,
   noLowercase,
   noNumber,
+  notMatch,
   noSpecialChar,
 }

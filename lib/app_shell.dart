@@ -1,13 +1,16 @@
 import 'package:design_system/design_system_export.dart';
 import 'package:donezy_app/src/modules/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
+import 'package:donezy_app/src/modules/auth/blocs/sign_out_bloc/sign_out_bloc.dart';
 import 'package:donezy_app/src/modules/auth/blocs/sign_up_bloc/sign_up_bloc.dart';
 import 'package:donezy_app/src/modules/auth/blocs/watch_auth_bloc/watch_auth_bloc.dart';
-import 'package:donezy_app/src/modules/auth/presentation/pages/login_page.dart';
 import 'package:donezy_app/src/modules/common/domain/const/const_strings.dart';
 import 'package:donezy_app/src/modules/common/infrastructure/injection/injection.dart';
-import 'package:donezy_app/src/modules/home/initial_screen.dart';
+import 'package:donezy_app/src/modules/global/theme_mode/blocs/set_theme_mode/set_theme_mode_bloc.dart';
+import 'package:donezy_app/src/modules/global/theme_mode/blocs/watch_theme_mode/watch_theme_mode_bloc.dart';
+import 'package:donezy_app/src/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class AppShell extends StatelessWidget {
   const AppShell({super.key});
@@ -19,37 +22,51 @@ class AppShell extends StatelessWidget {
         BlocProvider(create: (context) => getIt<WatchAuthBloc>()),
         BlocProvider(create: (context) => getIt<SignInBloc>()),
         BlocProvider(create: (context) => getIt<SignUpBloc>()),
+        BlocProvider(create: (context) => getIt<WatchThemeModeBloc>()),
+        BlocProvider(create: (context) => getIt<SetThemeModeBloc>()),
+        BlocProvider(create: (context) => getIt<SignOutBloc>()),
       ],
-      child: MaterialApp(
-        theme: DSTheme.lightThemeData,
-        home: Scaffold(
-          body: BlocConsumer<WatchAuthBloc, WatchAuthState>(
-            listener: (context, state) => switch (state) {
-              WatchAuthFailure() => ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    ConstStrings.error,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  backgroundColor: context.dSColor.error,
+      child: ChangeNotifierProvider<DSThemeController>(
+        create: (context) => DSThemeController(),
+        child: BlocListener<WatchThemeModeBloc, WatchThemeModeState>(
+          listener: _onThemeModeChanged,
+          child: Consumer<DSThemeController>(
+            builder: (_, DSThemeController themeController, _) =>
+                MaterialApp.router(
+                  theme: themeController.themeData,
+                  routerConfig: router,
+                  builder: (context, child) {
+                    return BlocListener<WatchAuthBloc, WatchAuthState>(
+                      listener: (context, state) => switch (state) {
+                        WatchAuthFailure() =>
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                ConstStrings.error,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              backgroundColor: context.dSColor.error,
+                            ),
+                          ),
+                        _ => null,
+                      },
+                      child: child!,
+                    );
+                  },
                 ),
-              ),
-              _ => null,
-            },
-            builder: (context, state) => switch (state) {
-              Authenticated() => InitialScreen(),
-              Unauthenticated() => const LoginPage(),
-              WatchAuthInitial() => const SizedBox.shrink(),
-              WatchAuthLoading() => const Center(
-                child: CircularProgressIndicator.adaptive(),
-              ),
-              WatchAuthFailure() => const Center(
-                child: Text(ConstStrings.errorGettingAuthState),
-              ),
-            },
           ),
         ),
       ),
     );
+  }
+
+  void _onThemeModeChanged(BuildContext context, WatchThemeModeState state) {
+    final themeController = context.read<DSThemeController>();
+    switch (state) {
+      case WatchThemeModeSuccess(themeMode: final themeModeState):
+        themeController.updateTheme(themeModeState);
+
+      default:
+    }
   }
 }

@@ -8,6 +8,7 @@ class TaskPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.surfaceDim,
         centerTitle: false,
         title: Text(ConstStrings.makeTasks),
         elevation: 0,

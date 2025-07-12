@@ -1,7 +1,7 @@
 part of 'ds_theme.dart';
 
 final ColorScheme _dsLightColorScheme = const ColorScheme.light().copyWith(
-  primary: DSPaletteScheme.light.primary,
+  primary: DSPaletteScheme.light.primary.shade400,
   primaryContainer: DSPaletteScheme.light.primary.shade800,
   secondary: DSPaletteScheme.light.secondary.shade600,
   secondaryContainer: DSPaletteScheme.light.secondary.shade900,
@@ -16,10 +16,11 @@ final ColorScheme _dsLightColorScheme = const ColorScheme.light().copyWith(
   onSecondary: DSPaletteScheme.light.neutral,
   onSecondaryContainer: DSPaletteScheme.light.neutral,
   onSurface: DSPaletteScheme.light.neutral.shade900,
-  onSurfaceVariant: DSPaletteScheme.light.neutral.shade700,
+  onSurfaceVariant: DSPaletteScheme.light.neutral.shade500,
   onError: DSPaletteScheme.light.neutral,
   brightness: Brightness.light,
   scrim: DSPaletteScheme.light.neutral.shade100,
+  surfaceDim: DSPaletteScheme.light.neutral.shade100,
 );
 
 final ThemeData _dsLightThemeData = ThemeData.light().copyWith(
@@ -370,8 +371,5 @@ final ThemeData _dsLightThemeData = ThemeData.light().copyWith(
       ),
     ),
   ),
-  extensions: [
-    dsColorLight,
-    dsTypographyThemeLight,
-  ],
+  extensions: [dsColorLight, dsTypographyThemeLight],
 );

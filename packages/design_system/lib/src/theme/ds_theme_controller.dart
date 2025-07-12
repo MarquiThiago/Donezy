@@ -1,60 +1,40 @@
 import 'package:flutter/material.dart';
 
 import 'base/ds_theme.dart';
+import 'ds_theme_mode.dart';
+import 'ds_theme_mode_state.dart';
 
 class DSThemeController extends ChangeNotifier {
-  DSThemeController({required DSThemeMode initialMode}) {
-    dsThemeMode = initialMode;
-  }
+  DSThemeController();
 
-  DSThemeMode get dsThemeMode => _dsThemeMode;
+  DSThemeMode get appThemeMode => _appThemeMode;
   ThemeMode get themeMode => _themeMode;
   ThemeData get themeData => _themeData;
+  bool get isDark => _effectiveBrightness == Brightness.dark;
 
-  DSThemeMode _dsThemeMode = DSThemeMode.dark;
-  ThemeMode _themeMode = ThemeMode.dark;
+  DSThemeMode _appThemeMode = DSThemeMode.system;
+  ThemeMode _themeMode = ThemeMode.system;
   ThemeData _themeData = DSTheme.darkThemeData;
+  Brightness? _effectiveBrightness = Brightness.dark;
 
-  set dsThemeMode(DSThemeMode newMode) {
-    _dsThemeMode = newMode;
-    _toggleThemeData(newMode);
-    _toggleThemeMode(newMode);
+  void updateTheme(DSThemeModeState state) {
+    _appThemeMode = state.selected;
+    _effectiveBrightness = state.effectiveBrightness;
+    _toggleThemeMode(_appThemeMode, _effectiveBrightness);
+    _toggleThemeData();
     notifyListeners();
   }
 
-  void _toggleThemeMode(DSThemeMode newMode) {
-    switch (newMode) {
-      case DSThemeMode.light:
-        _themeMode = ThemeMode.light;
-        break;
-      case DSThemeMode.dark:
-        _themeMode = ThemeMode.dark;
-        break;
-    }
-  }
-
-  void _toggleThemeData(DSThemeMode newMode) {
-    switch (newMode) {
-      case DSThemeMode.light:
-        _themeData = DSTheme.lightThemeData;
-        break;
-      case DSThemeMode.dark:
-        _themeData = DSTheme.darkThemeData;
-        break;
-    }
-  }
-}
-
-enum DSThemeMode {
-  light,
-  dark;
-
-  T map<T>({
-    required T Function() light,
-    required T Function() dark,
-  }) =>
-      switch (this) {
-        DSThemeMode.light => light(),
-        DSThemeMode.dark => dark(),
+  void _toggleThemeMode(DSThemeMode newMode, Brightness? effectiveBrightness) =>
+      _themeMode = switch (newMode) {
+        DSThemeMode.light => ThemeMode.light,
+        DSThemeMode.dark => ThemeMode.dark,
+        DSThemeMode.system =>
+          effectiveBrightness == Brightness.dark
+              ? ThemeMode.dark
+              : ThemeMode.light,
       };
+
+  void _toggleThemeData() =>
+      _themeData = isDark ? DSTheme.darkThemeData : DSTheme.lightThemeData;
 }

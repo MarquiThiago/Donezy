@@ -11,19 +11,19 @@ abstract class DSPaletteScheme {
   static const DSPalette light = DSPalette(primary, secondary, _lightNeutral);
   static const DSPalette dark = DSPalette(primary, secondary, _darkNeutral);
 
-  static const int _primaryStdValue = 0xFF2A6EF4; // Azul botão/flutuante
+  static const int _primaryStdValue = 0xFF3F51B5; // Indigo padrão Flutter
   static const MaterialColor primary =
       MaterialColor(_primaryStdValue, <int, Color>{
-        50: Color(0xFFE8F0FE),
-        100: Color(0xFFD0E1FD),
-        200: Color(0xFFA1C3FB),
-        300: Color(0xFF729EFA),
-        400: Color(0xFF4F83F7),
+        50: Color(0xFFE8EAF6),
+        100: Color(0xFFC5CAE9),
+        200: Color(0xFF9FA8DA),
+        300: Color(0xFF7986CB),
+        400: Color(0xFF5C6BC0),
         500: Color(_primaryStdValue),
-        600: Color(0xFF225ED8),
-        700: Color(0xFF1B52C5),
-        800: Color(0xFF1749B0),
-        900: Color(0xFF10378A),
+        600: Color(0xFF3949AB),
+        700: Color(0xFF303F9F),
+        800: Color(0xFF283593),
+        900: Color(0xFF1A237E),
       });
 
   static const int _secondaryPrimaryValue =
