@@ -10,9 +10,8 @@ void main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Inicializar Firebase
   await FirebaseConfig.initializeFirebase();
-  configureInjection();
+  await configureInjection();
 
   runApp(const AppShell());
 }

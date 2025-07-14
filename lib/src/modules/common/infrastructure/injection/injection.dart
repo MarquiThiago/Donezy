@@ -7,6 +7,6 @@ final GetIt getIt = GetIt.instance;
 
 @InjectableInit(preferRelativeImports: true)
 Future<void> configureInjection() async {
-  getIt.init();
+  await getIt.init();
   await getIt.allReady();
 }

@@ -3,11 +3,12 @@ import 'package:donezy_app/src/modules/auth/blocs/sign_in_bloc/sign_in_bloc.dart
 import 'package:donezy_app/src/modules/auth/blocs/sign_out_bloc/sign_out_bloc.dart';
 import 'package:donezy_app/src/modules/auth/blocs/sign_up_bloc/sign_up_bloc.dart';
 import 'package:donezy_app/src/modules/auth/blocs/watch_auth_bloc/watch_auth_bloc.dart';
+import 'package:donezy_app/src/modules/auth/presentation/auth_screen.dart';
 import 'package:donezy_app/src/modules/common/domain/const/const_strings.dart';
 import 'package:donezy_app/src/modules/common/infrastructure/injection/injection.dart';
 import 'package:donezy_app/src/modules/global/theme_mode/blocs/set_theme_mode/set_theme_mode_bloc.dart';
 import 'package:donezy_app/src/modules/global/theme_mode/blocs/watch_theme_mode/watch_theme_mode_bloc.dart';
-import 'package:donezy_app/src/routes/router.dart';
+import 'package:donezy_app/src/modules/home/initial_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -19,11 +20,13 @@ class AppShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        // Blocs de tema
+        BlocProvider(create: (context) => getIt<WatchThemeModeBloc>()),
+        BlocProvider(create: (context) => getIt<SetThemeModeBloc>()),
+        // Blocs de autenticação
         BlocProvider(create: (context) => getIt<WatchAuthBloc>()),
         BlocProvider(create: (context) => getIt<SignInBloc>()),
         BlocProvider(create: (context) => getIt<SignUpBloc>()),
-        BlocProvider(create: (context) => getIt<WatchThemeModeBloc>()),
-        BlocProvider(create: (context) => getIt<SetThemeModeBloc>()),
         BlocProvider(create: (context) => getIt<SignOutBloc>()),
       ],
       child: ChangeNotifierProvider<DSThemeController>(
@@ -31,29 +34,20 @@ class AppShell extends StatelessWidget {
         child: BlocListener<WatchThemeModeBloc, WatchThemeModeState>(
           listener: _onThemeModeChanged,
           child: Consumer<DSThemeController>(
-            builder: (_, DSThemeController themeController, _) =>
-                MaterialApp.router(
-                  theme: themeController.themeData,
-                  routerConfig: router,
-                  builder: (context, child) {
-                    return BlocListener<WatchAuthBloc, WatchAuthState>(
-                      listener: (context, state) => switch (state) {
-                        WatchAuthFailure() =>
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                ConstStrings.error,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              backgroundColor: context.dSColor.error,
-                            ),
-                          ),
-                        _ => null,
-                      },
-                      child: child!,
-                    );
-                  },
-                ),
+            builder: (_, DSThemeController themeController, _) => MaterialApp(
+              theme: themeController.themeData,
+              home: BlocBuilder<WatchAuthBloc, WatchAuthState>(
+                builder: (context, state) {
+                  return switch (state) {
+                    WatchAuthInitial() || WatchAuthLoading() => const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                    Authenticated() => const InitialScreen(),
+                    _ => const AuthScreen(),
+                  };
+                },
+              ),
+            ),
           ),
         ),
       ),
