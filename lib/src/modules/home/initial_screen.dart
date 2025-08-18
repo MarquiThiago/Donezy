@@ -25,7 +25,7 @@ class _InitialScreenState extends State<InitialScreen> {
         color: Theme.of(context).colorScheme.surface,
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            vertical: DSSpace.medium,
+            vertical: DSSpace.large,
             horizontal: DSSpace.medium,
           ),
           child: GNav(
