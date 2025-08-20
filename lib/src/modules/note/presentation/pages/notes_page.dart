@@ -8,27 +8,23 @@ class NotesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(DSSpace.medium),
-              child: Text(
-                ConstStrings.takeNotes,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ),
-            Expanded(
-              child: ListView.separated(
-                separatorBuilder: (context, index) => DSBoxSpace.small(),
-                itemCount: 20,
-                itemBuilder: (context, index) =>
-                    ListTile(title: Text(ConstStrings.data)),
-              ),
-            ),
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        title: Text(
+          ConstStrings.takeNotes,
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+        elevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.surfaceDim,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: DSSpace.small),
+        child: ListView.separated(
+          separatorBuilder: (context, index) => DSBoxSpace.small(),
+          itemCount: 20,
+          itemBuilder: (context, index) =>
+              ListTile(title: Text(ConstStrings.data)),
         ),
       ),
     );

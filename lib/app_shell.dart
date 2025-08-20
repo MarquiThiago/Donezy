@@ -7,7 +7,7 @@ import 'package:donezy_app/src/modules/auth/presentation/auth_screen.dart';
 import 'package:donezy_app/src/modules/common/infrastructure/injection/injection.dart';
 import 'package:donezy_app/src/modules/global/theme_mode/blocs/set_theme_mode/set_theme_mode_bloc.dart';
 import 'package:donezy_app/src/modules/global/theme_mode/blocs/watch_theme_mode/watch_theme_mode_bloc.dart';
-import 'package:donezy_app/src/modules/home/initial_screen.dart';
+import 'package:donezy_app/src/modules/home/presentation/screens/initial_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -37,8 +37,8 @@ class AppShell extends StatelessWidget {
                 builder: (context, state) {
                   return switch (state) {
                     WatchAuthInitial() || WatchAuthLoading() => const Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      ),
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
                     Authenticated() => const InitialScreen(),
                     _ => const AuthScreen(),
                   };
