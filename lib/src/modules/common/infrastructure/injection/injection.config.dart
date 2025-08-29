@@ -41,6 +41,7 @@ import '../../../global/theme_mode/infrastructure/persist_theme_mode_service_imp
     as _i895;
 import '../../../note/domain/note_repository.dart' as _i70;
 import '../../../note/infrastructure/note_repository_impl.dart' as _i1011;
+import '../../../splash_screen/blocs/splash_bloc/splash_bloc.dart' as _i596;
 import '../firebase/firebase_injectable_modules.dart' as _i166;
 import 'external_modules.dart' as _i219;
 
@@ -60,6 +61,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i59.FirebaseAuth>(
       () => firebaseInjectableModules.firebaseAuth,
     );
+    gh.singleton<_i596.SplashBloc>(() => _i596.SplashBloc());
     gh.lazySingleton<_i974.FirebaseFirestore>(
       () => firebaseInjectableModules.firestore,
     );

@@ -26,6 +26,5 @@ class SignOutTile extends StatelessWidget {
 
   void onTap(BuildContext context) {
     context.read<SignOutBloc>().add(const SignOutEvent.signOut());
-    Navigator.of(context).pop();
   }
 }
