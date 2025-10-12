@@ -24,7 +24,7 @@ class _InitialScreenState extends State<InitialScreen> {
           pages[index],
           Positioned(
             bottom: DSSpace.xLarge,
-            left: 10,
+            left: 30,
             right: 10,
             child: FloatingBottomNavBar(
               index: index,
