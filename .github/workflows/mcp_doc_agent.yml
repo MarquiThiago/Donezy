@@ -1,0 +1,37 @@
+name: MCP Documentation Agent
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check last commit message for automated runs
+        id: check_commit
+        run: |
+          LAST_MSG=$(git log -1 --pretty=%B)
+          echo "Last commit message: $LAST_MSG"
+          if echo "$LAST_MSG" | grep -q "docs(agent): automated update"; then
+            echo "Automated documentation commit detected; exiting to avoid loop.";
+            exit 0;
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Run MCP Documentation Agent runner
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod +x .github/scripts/doc_agent_runner.sh
+          .github/scripts/doc_agent_runner.sh
