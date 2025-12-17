@@ -22,10 +22,11 @@ Document the feature: **`{{feature_path_or_name}}`**
 
 Repository context:
 - Repo root: `{{repo_root}}`
-- Current branch: `{{branch_name}}` (compare to default branch `main`)
+- Current branch: `{{branch_name}}` (compare to default branch `master`)
 
 Required outputs:
-- A **feature document** in Markdown at `docs/features/{{feature-slug}}.md` (create if missing, or update if exists).
+- A **feature document** in Markdown at `lib/src/modules/{{module}}/README.md` (create if missing, or update if exists).
+- Update or create a central index at `docs/features/INDEX.md` with links to module READMEs (if configured).
 - Update the repo `README.md` (or relevant top-level docs) to reflect feature status and quick links.
 - Include Mermaid diagrams (component, sequence, and data flow) embedded in the Markdown.
 
@@ -151,9 +152,11 @@ sequenceDiagram
 - Include: Component Diagram, Sequence Diagram for main flows, Data Flow Diagram.
 
 ## Update behavior & commit rules
-- If a `docs/features/{{feature-slug}}.md` already exists, update it in-place, preserving author metadata and adding an `Updated:` timestamp.
+- The primary location for feature docs is the module root: `lib/src/modules/{{module}}/README.md`. If the file already exists, update it in-place, preserving author metadata and adding an `Updated:` timestamp.
+- If a legacy doc exists under `docs/features/{{feature-slug}}/README.md`, move it into the module root (or remove it) and update the central index accordingly.
+- Maintain or create a central index `docs/features/INDEX.md` linking all module READMEs; update it when adding or removing module docs.
 - Update top-level `README.md` to include quick link and short summary for the feature, if not already present.
-- Commit message suggestion: `docs(feature): update '{{feature-slug}}' documentation — automated` (only if agent is authorized to commit).
+- Commit message suggestion: `docs(feature): update 'lib/src/modules/{{module}}' README — automated` (only if agent is authorized to commit).
 
 ## Output validation (what the agent must include before finishing)
 - A complete Markdown file with the sections above filled.
