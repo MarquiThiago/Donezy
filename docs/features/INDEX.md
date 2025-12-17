@@ -6,7 +6,7 @@ This index lists features (modules under `lib/src/modules/`) and points to their
 
 ## Features
 
-- **auth** — `lib/src/modules/auth/` — *No module README yet*
+- **auth** — [README](../../lib/src/modules/auth/README.md)
 - **common** — `lib/src/modules/common/` — *No module README yet*
 - **global** — `lib/src/modules/global/` — *No module README yet*
 - **home** — `lib/src/modules/home/` — *No module README yet*
