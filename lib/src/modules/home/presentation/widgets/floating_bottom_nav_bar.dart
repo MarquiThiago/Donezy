@@ -1,6 +1,8 @@
 import 'package:design_system/design_system_export.dart';
 import 'package:donezy_app/src/modules/common/domain/const/const_strings.dart';
+import 'package:donezy_app/src/modules/note/presentation/blocs/item_manager_bloc/item_manager_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class FloatingBottomNavBar extends StatelessWidget {
@@ -66,9 +68,14 @@ class FloatingBottomNavBar extends StatelessWidget {
             //   ),
             // ],
           ),
-          child: Icon(
-            Icons.add,
-            color: Theme.of(context).colorScheme.onPrimary,
+          child: InkWell(
+            onTap: () => context.read<ItemManagerBloc>().add(
+              const ItemManagerEvent.add('New note', 'this is a test note'),
+            ),
+            child: Icon(
+              Icons.add,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
           ),
         ),
       ],
