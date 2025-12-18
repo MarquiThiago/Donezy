@@ -80,7 +80,7 @@ jobs:
 
       - name: Run MCP Documentation Agent runner
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.AGENT_PUSH_TOKEN }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           chmod +x .github/scripts/doc_agent_runner.sh
