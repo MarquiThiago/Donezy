@@ -1,9 +1,12 @@
 name: MCP Documentation Agent
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
-      - '**'
+      - "*"
 
 jobs:
   generate-docs:
