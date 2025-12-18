@@ -4,6 +4,9 @@ abstract class ConstStrings {
   // Construtor privado para evitar instanciação
   ConstStrings._();
 
+  static const String appName = 'Donezy';
+  static const String oganizeYourTasks = 'Organize your tasks';
+
   // ===== AUTH MODULE =====
   static const String signIn = 'Sign In';
   static const String email = 'Email';
@@ -35,4 +38,9 @@ abstract class ConstStrings {
   // ===== ERROR MESSAGES =====
   static const String error = 'Error';
   static const String errorGettingAuthState = 'Error getting auth state';
+
+  // ===== PROFILE MODULE =====
+  static const String profileTitle = 'Profile';
+  static const String changePassword = 'Change Password';
+  static const String settings = 'Settings';
 }
