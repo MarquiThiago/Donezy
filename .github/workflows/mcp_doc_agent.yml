@@ -29,9 +29,55 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install requests
+
+      flowchart TD
+        A[Developer pushes commit → branch] --> B[GitHub Actions trigger\n(.github/workflows/mcp_doc_agent.yml)]
+        B --> C[Checkout repo & fetch origin/master]
+        C --> D{Is last commit an\nautomated-docs commit?}
+        D -- Yes --> E[Exit (avoid infinite loop)]
+        D -- No --> F[Compute diff vs origin/master\n(git diff --name-only)]
+        F --> G{Any changed files\nunder lib/src/modules/?}
+        G -- No --> H[Exit (nothing to update)]
+        G -- Yes --> I[Map changed files → affected modules]
+        I --> J[Run analysis & tests on affected modules\n(static checks, unit/widget tests (selective))]
+        J --> K{Tests & checks pass?}
+        K -- No --> L[Create Issue / post comment with analysis\n(attach failing test logs), STOP]
+        K -- Yes --> M[Call MCP LLM\n(provide prompt-template + diff + files + test output)]
+        M --> N[LLM returns doc updates + metadata\n(diff/markdown + confidence score)]
+        N --> O[Validate generated docs\n(markdownlint, mermaid syntax, secrets scan)]
+        O --> P{Docs valid and confidence ok?}
+        P -- No --> Q[Create Issue / post comment with suggested docs,\nflag for manual review, STOP]
+        P -- Yes --> R[Commit documents directly to the **same branch**\ncommit msg: \"docs(agent): automated update for modules: ...\"]
+        R --> S[Push commit → origin/current-branch]
+        S --> T[Workflow run triggered again; initial commit check prevents loop → EXIT SUCCESS]
+        
+        %% Optional fallback if low confidence
+        N -- low confidence --> U([OPTIONAL] Create Draft PR labeled \"auto-docs\" for manual review)
+        # Optional fallback if low confidence: create a Draft PR labeled "auto-docs" for manual review
+# N -- low confidence --> U([OPTIONAL] Create Draft PR labeled "auto-docs" for manual review)
+# U --> V[Human reviews & merges] --> T
+
+      - name: Install gh CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh
+
+      - name: Authenticate gh CLI (optional)
+        if: ${{ secrets.GH_TOKEN != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          echo "Authenticating gh CLI using GH_TOKEN secret"
+          echo "$GH_TOKEN" | gh auth login --with-token
+
       - name: Run MCP Documentation Agent runner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           chmod +x .github/scripts/doc_agent_runner.sh
           .github/scripts/doc_agent_runner.sh

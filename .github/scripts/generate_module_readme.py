@@ -33,9 +33,9 @@ def build_auto_content(module: str, module_path: Path) -> str:
     return "\n".join(content)
 
 
-def update_readme(module: str, module_path: Path):
+def update_readme(module: str, module_path: Path, auto_content: str | None = None):
     readme = module_path / "README.md"
-    auto = build_auto_content(module, module_path)
+    auto = auto_content or build_auto_content(module, module_path)
 
     if readme.exists():
         text = readme.read_text(encoding="utf-8")
@@ -66,6 +66,8 @@ def update_readme(module: str, module_path: Path):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--module", required=True, help="module name under lib/src/modules/")
+    parser.add_argument("--repo_root", required=False, help="repo root (optional)")
+    parser.add_argument("--auto_content_file", required=False, help="path to file with LLM-generated markdown to insert into auto block")
     args = parser.parse_args()
     module = args.module
     module_path = Path("lib/src/modules") / module
@@ -73,7 +75,11 @@ def main():
         print(f"Module path not found: {module_path}")
         raise SystemExit(1)
 
-    changed = update_readme(module, module_path)
+    auto_content = None
+    if getattr(args, 'auto_content_file', None):
+        auto_content = open(args.auto_content_file, 'r', encoding='utf-8').read()
+
+    changed = update_readme(module, module_path, auto_content=auto_content)
 
     # Update central index entry
     index = Path("docs/features/INDEX.md")

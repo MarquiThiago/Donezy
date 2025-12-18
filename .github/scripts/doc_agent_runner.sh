@@ -41,38 +41,55 @@ echo "Modules affected: ${UNIQUE_MODULES[*]}"
 
 CHANGED_ANY=0
 
-for module in "${UNIQUE_MODULES[@]}"; do
-  echo "Processing module: $module"
-  python3 .github/scripts/generate_module_readme.py --module "$module"
-  # Check git status for module README changes
-  if git status --porcelain | grep -q "lib/src/modules/$module/README.md"; then
-    CHANGED_ANY=1
-  fi
-done
-
-if [ $CHANGED_ANY -eq 0 ]; then
-  echo "No README changes generated.";
+# guard to avoid reacting to our own automated commits
+LAST_AUTHOR=$(git log -1 --pretty=format:'%an' || true)
+LAST_MSG=$(git log -1 --pretty=format:'%s' || true)
+if [ "$LAST_AUTHOR" = "MCP Documentation Agent" ] && [[ "$LAST_MSG" == docs\(agent\):* ]]; then
+  echo "Last commit was an automated docs update; exiting to avoid loops."
   exit 0
 fi
 
-# Configure git and commit changes
-git config user.name "MCP Documentation Agent"
-git config user.email "mcp-docs-bot@users.noreply.github.com"
+REPO_ROOT=$(pwd)
 
-BRANCH_NAME="docs/agent-update/$(date +%s)"
-git checkout -b "$BRANCH_NAME"
-git add lib/src/modules/*/README.md docs/features/INDEX.md || true
-COMMIT_MSG="docs(agent): automated update for modules: ${UNIQUE_MODULES[*]}"
-git commit -m "$COMMIT_MSG" || true
+for module in "${UNIQUE_MODULES[@]}"; do
+  echo "Processing module: $module"
 
-echo "Pushing branch $BRANCH_NAME"
-git push origin "$BRANCH_NAME"
+  echo "Calling LLM to generate content for module $module"
+  LLM_OUT=$(python3 .github/scripts/llm_generate.py --module "$module" --repo_root "$REPO_ROOT" --prompt_file ".github/prompts/documentation_agent.prompt.md") || true
+  if [ -z "$LLM_OUT" ]; then
+    echo "LLM generation returned empty for module $module; skipping"
+    continue
+  fi
 
-echo "Opening a Pull Request via gh CLI (if available)"
-if command -v gh >/dev/null 2>&1; then
-  gh pr create --title "$COMMIT_MSG" --body "Automated documentation updates for: ${UNIQUE_MODULES[*]}" --base "${GITHUB_REF##*/}" || true
-else
-  echo "gh CLI not found; skipping PR creation. Branch pushed: $BRANCH_NAME"
-fi
+  # parse JSON output
+  MODULE_MD=$(echo "$LLM_OUT" | python3 -c "import sys,json; print(json.load(sys.stdin).get('markdown',''))")
+  CONFIDENCE=$(echo "$LLM_OUT" | python3 -c "import sys,json; print(json.load(sys.stdin).get('confidence',0))")
+
+  # write temp file and validate
+  TMPFILE=$(mktemp)
+  echo "$MODULE_MD" > "$TMPFILE"
+  python3 .github/scripts/validate_generated_docs.py --input "$TMPFILE"
+  if [ $? -ne 0 ]; then
+    echo "Validation failed for module $module; skipping commit"
+    rm "$TMPFILE"
+    continue
+  fi
+
+  # pass to generator which will insert auto_content into README
+  python3 .github/scripts/generate_module_readme.py --module "$module" --repo_root "$REPO_ROOT" --auto_content_file "$TMPFILE"
+  rm "$TMPFILE"
+
+  README_PATH="lib/src/modules/$module/README.md"
+  if git status --porcelain | grep -q "$README_PATH"; then
+    COMMIT_MSG="docs(agent): automated update for module: $module"
+    git add "$README_PATH"
+    git commit -m "$COMMIT_MSG" || true
+    git push origin HEAD || true
+    echo "Committed and pushed updates for module $module"
+  else
+    echo "No README changes for $module after generator run"
+  fi
+
+done
 
 echo "Runner finished"

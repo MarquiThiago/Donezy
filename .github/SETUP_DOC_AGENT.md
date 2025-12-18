@@ -20,8 +20,8 @@ This document explains how to configure repository access and secrets so the aut
 - Use the App's generated installation token in your workflow (requires additional setup to exchange JWT for installation token).
 
 ## How the workflow uses `GH_TOKEN`
-- If `GH_TOKEN` is present in repository secrets, the workflow will authenticate the `gh` CLI using it and create Draft PRs labeled `auto-docs` on branches pushed by the runner.
-- If `GH_TOKEN` is not present, `GITHUB_TOKEN` (automatically provided by GitHub Actions) will be used for push; the workflow will still push the branch but PR creation may fail if `gh` isn't authenticated.
+- By default the runner now commits generated docs directly to the **same branch** where the change originated with commit messages like `docs(agent): automated update for module: ...`.
+- If `GH_TOKEN` is present the workflow may also create Draft PRs labeled `auto-docs` for low-confidence or manual-review cases using the authenticated `gh` CLI; if `GH_TOKEN` is not present, `GITHUB_TOKEN` (automatically provided by GitHub Actions) will still be used to push commits but PR creation will be skipped if `gh` isn't authenticated.
 
 ## Add the secret
 1. Go to the repository → Settings → Secrets & variables → Actions → New repository secret.
