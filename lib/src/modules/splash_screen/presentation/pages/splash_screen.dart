@@ -1,7 +1,6 @@
+import 'package:donezy_app/src/modules/common/presentation/consts/strings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:design_system/design_system_export.dart';
-import 'package:donezy_app/src/modules/splash_screen/blocs/splash_bloc/splash_bloc.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -161,7 +160,7 @@ class _SplashScreenState extends State<SplashScreen>
                             child: Column(
                               children: [
                                 Text(
-                                  'Donezy',
+                                  Strings.appName,
                                   style: Theme.of(context)
                                       .textTheme
                                       .displayLarge
@@ -174,7 +173,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'Organize suas tarefas',
+                                  Strings.oganizeYourTasks,
                                   style: Theme.of(context).textTheme.titleMedium
                                       ?.copyWith(
                                         color: DSColors.white.withValues(
