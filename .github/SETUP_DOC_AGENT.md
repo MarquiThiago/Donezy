@@ -12,6 +12,7 @@ This document explains how to configure repository access and secrets so the aut
   - workflow (needed if you plan to trigger workflows or manage workflow runs)
   - admin:repo_hook (only if managing webhooks)
 - Add the token to your repository or organization secrets as `GH_TOKEN` (or share with GitHub Apps as needed).
+- Also add a secret named `AGENT_PUSH_TOKEN` containing a PAT (Personal Access Token) with **repo** scope; this token will be used by the workflow to push changes to the repository when needed.
 
 2) Use GitHub App (enterprise-grade, recommended for orgs)
 

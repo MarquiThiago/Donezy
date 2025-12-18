@@ -7,6 +7,10 @@ on:
   push:
     branches:
       - "*"
+  pull_request:
+    branches:
+      - "*"
+  workflow_dispatch: {}
 
 jobs:
   generate-docs:
@@ -80,6 +84,23 @@ jobs:
           else
             echo "GH_TOKEN not set; skipping gh authentication"
           fi
+
+      - name: Configure git to use AGENT_PUSH_TOKEN for pushes (optional)
+        env:
+          AGENT_PUSH_TOKEN: ${{ secrets.AGENT_PUSH_TOKEN }}
+        run: |
+          if [ -n "${AGENT_PUSH_TOKEN:-}" ]; then
+            echo "Configuring git remote to use AGENT_PUSH_TOKEN"
+            git remote set-url origin https://x-access-token:${AGENT_PUSH_TOKEN}@github.com/${{ github.repository }} || true
+          else
+            echo "AGENT_PUSH_TOKEN not set; runner will use default credentials"
+          fi
+
+      - name: Debug auth / git info (safe)
+        run: |
+          echo "git remote:" && git remote -v
+          echo "git user.name:" && git config user.name || true
+          echo "git user.email:" && git config user.email || true
 
       - name: Run MCP Documentation Agent runner
         env:
