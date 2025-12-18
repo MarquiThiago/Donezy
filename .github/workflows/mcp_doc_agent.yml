@@ -68,12 +68,15 @@ jobs:
           sudo apt-get install -y gh
 
       - name: Authenticate gh CLI (optional)
-        if: ${{ secrets.GH_TOKEN != '' }}
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          echo "Authenticating gh CLI using GH_TOKEN secret"
-          echo "$GH_TOKEN" | gh auth login --with-token
+          if [ -n "${GH_TOKEN:-}" ]; then
+            echo "Authenticating gh CLI using GH_TOKEN secret"
+            echo "$GH_TOKEN" | gh auth login --with-token || true
+          else
+            echo "GH_TOKEN not set; skipping gh authentication"
+          fi
 
       - name: Run MCP Documentation Agent runner
         env:
