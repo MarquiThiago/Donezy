@@ -41,6 +41,31 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install requests
 
+      - name: Install and start Ollama
+        run: |
+          # Download and install Ollama
+          curl -fsSL https://ollama.ai/install.sh | sh || true
+          
+          # Start Ollama in background
+          ollama serve &
+          OLLAMA_PID=$!
+          echo "OLLAMA_PID=$OLLAMA_PID" >> $GITHUB_ENV
+          
+          # Wait for Ollama to be ready (max 60s)
+          echo "Waiting for Ollama to start..."
+          for i in {1..60}; do
+            if curl -s http://localhost:11434/api/tags > /dev/null 2>&1; then
+              echo "✓ Ollama is ready"
+              break
+            fi
+            sleep 1
+          done
+          
+          # Pull the model (first time takes ~2-3 minutes)
+          echo "Pulling Ollama model: mistral"
+          ollama pull mistral || echo "Model already cached"
+          echo "✓ Ollama ready for documentation generation"
+
       # Flowchart (diagram left as reference)
       # flowchart TD
       #   A[Developer pushes commit → branch] --> B[GitHub Actions trigger\n(.github/workflows/mcp_doc_agent.yml)]
