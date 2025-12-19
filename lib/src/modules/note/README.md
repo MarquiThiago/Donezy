@@ -9,11 +9,11 @@ Short description: <write a short description here>.
 The following files were changed in this module:
 - `infrastructure/note_repository_impl.dart`
 - `domain/note_repository.dart`
-- `presentation/pages/notes_page.dart`
-- `presentation/blocs/item_manager_bloc/item_manager_event.dart`
 - `presentation/blocs/item_manager_bloc/item_manager_bloc.dart`
-- `presentation/blocs/item_manager_bloc/item_manager_bloc.freezed.dart`
 - `presentation/blocs/item_manager_bloc/item_manager_state.dart`
+- `presentation/blocs/item_manager_bloc/item_manager_bloc.freezed.dart`
+- `presentation/blocs/item_manager_bloc/item_manager_event.dart`
+- `presentation/pages/notes_page.dart`
 - `presentation/widgets/item_card.dart`
 
 ## Suggested updates
