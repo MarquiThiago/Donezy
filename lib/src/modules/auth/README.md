@@ -193,35 +193,35 @@ Manual QA steps:
 
 ## Summary of changes
 The following files were changed in this module:
-- `blocs/sign_up_bloc/sign_up_bloc.freezed.dart`
-- `blocs/sign_up_bloc/sign_up_state.dart`
-- `blocs/sign_up_bloc/sign_up_bloc.dart`
 - `blocs/sign_up_bloc/sign_up_event.dart`
+- `blocs/sign_up_bloc/sign_up_bloc.dart`
+- `blocs/sign_up_bloc/sign_up_state.dart`
+- `blocs/sign_up_bloc/sign_up_bloc.freezed.dart`
+- `blocs/sign_out_bloc/sign_out_bloc.dart`
+- `blocs/sign_out_bloc/sign_out_bloc.freezed.dart`
+- `blocs/sign_out_bloc/sign_out_state.dart`
+- `blocs/sign_out_bloc/sign_out_event.dart`
 - `blocs/sign_in_bloc/sign_in_bloc.freezed.dart`
 - `blocs/sign_in_bloc/sign_in_event.dart`
-- `blocs/sign_in_bloc/sign_in_bloc.dart`
 - `blocs/sign_in_bloc/sign_in_state.dart`
-- `blocs/sign_out_bloc/sign_out_event.dart`
-- `blocs/sign_out_bloc/sign_out_state.dart`
-- `blocs/sign_out_bloc/sign_out_bloc.freezed.dart`
-- `blocs/sign_out_bloc/sign_out_bloc.dart`
+- `blocs/sign_in_bloc/sign_in_bloc.dart`
 - `blocs/watch_auth_bloc/watch_auth_bloc.freezed.dart`
-- `blocs/watch_auth_bloc/watch_auth_event.dart`
 - `blocs/watch_auth_bloc/watch_auth_state.dart`
+- `blocs/watch_auth_bloc/watch_auth_event.dart`
 - `blocs/watch_auth_bloc/watch_auth_bloc.dart`
 - `infrastructure/auth_repository_impl.dart`
-- `domain/auth_status.dart`
-- `domain/auth_repository.dart`
 - `domain/auth_status.freezed.dart`
-- `domain/input_validators/email_validator.dart`
-- `domain/input_validators/password_validator_translation.dart`
-- `domain/input_validators/email_validator_translation.dart`
-- `domain/input_validators/auth_validator.dart`
-- `domain/input_validators/password_validator.dart`
-- `domain/usecases/sign_in_with_email_and_password_usecase.dart`
-- `domain/usecases/watch_auth_status_usecase.dart`
-- `domain/usecases/sign_up_with_email_and_password_usecase.dart`
+- `domain/auth_repository.dart`
+- `domain/auth_status.dart`
 - `domain/usecases/sign_out_usecase.dart`
+- `domain/usecases/sign_up_with_email_and_password_usecase.dart`
+- `domain/usecases/watch_auth_status_usecase.dart`
+- `domain/usecases/sign_in_with_email_and_password_usecase.dart`
+- `domain/input_validators/auth_validator.dart`
+- `domain/input_validators/email_validator_translation.dart`
+- `domain/input_validators/password_validator.dart`
+- `domain/input_validators/password_validator_translation.dart`
+- `domain/input_validators/email_validator.dart`
 - `presentation/auth_screen.dart`
 
 ## Suggested updates
