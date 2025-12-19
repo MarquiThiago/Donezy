@@ -1,4 +1,4 @@
-import 'package:donezy_app/src/modules/common/presentation/consts/strings.dart';
+import 'package:donezy_app/src/modules/common/domain/const/const_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:design_system/design_system_export.dart';
 
@@ -160,7 +160,7 @@ class _SplashScreenState extends State<SplashScreen>
                             child: Column(
                               children: [
                                 Text(
-                                  Strings.appName,
+                                  ConstStrings.appName,
                                   style: Theme.of(context)
                                       .textTheme
                                       .displayLarge
@@ -173,7 +173,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  Strings.oganizeYourTasks,
+                                  ConstStrings.oganizeYourTasks,
                                   style: Theme.of(context).textTheme.titleMedium
                                       ?.copyWith(
                                         color: DSColors.white.withValues(

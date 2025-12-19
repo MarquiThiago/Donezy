@@ -31,10 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return BlocListener<SignUpBloc, SignUpState>(
       listener: (context, state) {
         if (state is SignUpSuccess) {
-          // O WatchAuthBloc irá detectar a mudança de autenticação automaticamente
-          // e redirecionar para a tela inicial
         } else if (state is SignUpFailure) {
-          // Mostra mensagem de erro
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
