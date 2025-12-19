@@ -5,4 +5,5 @@ class AppRoutes {
   static const String tasks = '/tasks';
   static const String profile = '/profile';
   static const String auth = '/auth';
+  static const String addItemBottomSheet = '/notes/add-item-bottom-sheet';
 }
