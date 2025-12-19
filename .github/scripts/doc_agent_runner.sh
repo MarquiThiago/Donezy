@@ -151,14 +151,65 @@ done
 
 # If there are any staged README changes collected, commit them in a single commit and push once
 if [ ${#CHANGED_READMES[@]} -ne 0 ]; then
-  echo "Staging README changes for modules: ${CHANGED_READMES[*]}"
+  echo "Preparing to commit README changes for modules: ${CHANGED_READMES[*]}"
+
+  # If we're on a detached HEAD (common for pull_request merge refs) or GITHUB_REF points to a PR merge,
+  # avoid committing on the merge commit which creates merge pollution. Instead, base the work on the
+  # source branch (origin/$BRANCH_NAME), applying our generated changes onto that branch.
+  CURRENT_REF="$(git rev-parse --abbrev-ref HEAD || true)"
+  if [ "$CURRENT_REF" = "HEAD" ] || [[ "${GITHUB_REF:-}" == refs/pull/*/merge ]]; then
+    echo "Detected detached HEAD or PR merge ref; will base changes onto origin/$BRANCH_NAME to avoid merge commits"
+
+    # Stash any generated changes (including untracked files) so we can switch safely
+    git stash push -u -m "mcp-doc-agent-stash" || true
+
+    # Ensure we have the latest remote branch reference
+    git fetch origin "$BRANCH_NAME" || git fetch origin || true
+
+    # If origin/<branch> exists, create/reset the local branch to that tip; otherwise create new branch locally
+    if git show-ref --verify --quiet "refs/remotes/origin/$BRANCH_NAME"; then
+      git checkout -B "$BRANCH_NAME" "origin/$BRANCH_NAME"
+    else
+      echo "origin/$BRANCH_NAME not found; creating local branch '$BRANCH_NAME' from current HEAD"
+      git checkout -B "$BRANCH_NAME"
+    fi
+
+    # Re-apply generated changes from stash
+    if git stash list | grep -q "mcp-doc-agent-stash"; then
+      # pop the most-recent matching stash entry
+      STASH_REF=$(git stash list | grep "mcp-doc-agent-stash" | head -n1 | cut -d: -f1)
+      git stash pop "$STASH_REF" || {
+        echo "stash pop failed; attempting to apply instead"
+        git stash apply "$STASH_REF" || true
+      }
+
+      # If conflicts exist after applying the stash, abort to avoid committing partial or conflicted changes
+      if git ls-files -u | grep -q .; then
+        echo "Conflicts detected when applying generated changes; aborting to avoid bad commit. Please resolve manually."
+        # leave the stash in place for manual recovery and exit with non-zero status
+        exit 1
+      fi
+    else
+      echo "No stash entry found; proceeding with current working tree"
+    fi
+  fi
+
+  # Stage the README changes and commit on the branch we've just checked out (or the branch we were already on)
   git add "${CHANGED_READMES[@]}"
   COMMIT_MSG="docs(agent): automated update for modules: $(printf "%s, " "${CHANGED_READMES[@]}" | sed 's/, $//')"
   if git diff --staged --quiet; then
     echo "Nothing staged after filtering; no commit necessary"
   else
     git commit -m "$COMMIT_MSG" || true
-    git push origin HEAD:refs/heads/$BRANCH_NAME || { echo "Batch push failed"; git --no-pager log -1 --pretty=fuller || true; }
+
+    # Push and if push rejects due to upstream changes, try a rebase then push (no force)
+    if ! git push origin HEAD:refs/heads/$BRANCH_NAME; then
+      echo "Push rejected, attempting to rebase against origin/$BRANCH_NAME and push again"
+      git fetch origin "$BRANCH_NAME" || true
+      git pull --rebase origin "$BRANCH_NAME" || true
+      git push origin HEAD:refs/heads/$BRANCH_NAME || { echo "Batch push failed after rebase"; git --no-pager log -1 --pretty=fuller || true; }
+    fi
+
     echo "Committed and pushed batch updates for modules: ${CHANGED_READMES[*]}"
   fi
 else
