@@ -36,8 +36,17 @@ for m in "${MODULES[@]}"; do
   echo "$m" >> "$TMP_FILE"
 done
 sort -u "$TMP_FILE" -o /tmp/mcp_modules.txt
-mapfile -t UNIQUE_MODULES < /tmp/mcp_modules.txt
+
+# Read unique modules (portably, without mapfile)
+UNIQUE_MODULES=()
+while IFS= read -r module; do
+  UNIQUE_MODULES+=("$module")
+done < /tmp/mcp_modules.txt
+
 echo "Modules affected: ${UNIQUE_MODULES[*]}"
+
+# Initialize array to collect README files with significant changes
+CHANGED_READMES=()
 
 CHANGED_ANY=0
 

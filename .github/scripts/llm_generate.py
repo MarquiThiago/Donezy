@@ -13,7 +13,11 @@ import os
 import sys
 from pathlib import Path
 
-import requests
+# Conditional import: requests only needed for remote LLM calls
+try:
+    import requests
+except ImportError:
+    requests = None
 
 
 def build_prompt(module: str, files: list[str], diff: str, prompt_template:str) -> str:
@@ -25,6 +29,8 @@ def build_prompt(module: str, files: list[str], diff: str, prompt_template:str) 
 
 
 def call_remote_llm(api_url: str, api_key: str, prompt: str) -> dict:
+    if not requests:
+        raise ImportError("requests module is required for remote LLM calls")
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     payload = {"prompt": prompt, "max_tokens": 1024}
     resp = requests.post(api_url, headers=headers, json=payload, timeout=60)

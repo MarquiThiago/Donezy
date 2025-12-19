@@ -6,6 +6,7 @@ This script writes an auto-generated block between markers so future runs can up
 import argparse
 from pathlib import Path
 from datetime import datetime
+from typing import Optional
 
 MARKER_START = "<!-- AUTO-GENERATED DOC START -->"
 MARKER_END = "<!-- AUTO-GENERATED DOC END -->"
@@ -33,7 +34,7 @@ def build_auto_content(module: str, module_path: Path) -> str:
     return "\n".join(content)
 
 
-def update_readme(module: str, module_path: Path, auto_content: str | None = None):
+def update_readme(module: str, module_path: Path, auto_content: Optional[str] = None):
     readme = module_path / "README.md"
     auto = auto_content or build_auto_content(module, module_path)
 
