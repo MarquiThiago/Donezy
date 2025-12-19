@@ -203,9 +203,24 @@ if [ ${#CHANGED_READMES[@]} -ne 0 ]; then
   ADDED_LINES=$(printf "%s" "$STAGED_DIFF" | grep '^+' | sed 's/^+//')
   REMOVED_LINES=$(printf "%s" "$STAGED_DIFF" | grep '^-' | sed 's/^-//')
 
-  # Normalize by trimming whitespace and filter out insignificant patterns
-  SIG_ADDED=$(printf "%s" "$ADDED_LINES" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' | grep -v -E '^$|^\*\*Updated:.*|^<!-- AUTO-GENERATED|^<!--' || true)
-  SIG_REMOVED=$(printf "%s" "$REMOVED_LINES" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' | grep -v -E '^$|^\*\*Updated:.*|^<!-- AUTO-GENERATED|^<!--' || true)
+  # Normalize by trimming whitespace (including some Unicode spaces) and filter out insignificant patterns
+  SIG_ADDED=$(printf "%s" "$ADDED_LINES" | perl -CS -ne 's/\x{00A0}//g; s/^\s+//; s/\s+$//; print "$_\n" if /\S/ && !/^\*\*Updated:/ && !/^<!-- AUTO-GENERATED/ && !/^<!--/;' || true)
+  SIG_REMOVED=$(printf "%s" "$REMOVED_LINES" | perl -CS -ne 's/\x{00A0}//g; s/^\s+//; s/\s+$//; print "$_\n" if /\S/ && !/^\*\*Updated:/ && !/^<!-- AUTO-GENERATED/ && !/^<!--/;' || true)
+
+  # If there are any significant lines left after normalization, show a compact debug view (helps catch invisible chars)
+  if [ -n "$(echo "$SIG_ADDED" | tr -d '\n')" ] || [ -n "$(echo "$SIG_REMOVED" | tr -d '\n')" ]; then
+    echo "Significant changes detected (debug):"
+    if [ -n "$(echo "$SIG_ADDED" | tr -d '\n')" ]; then
+      echo "=== SIG_ADDED (first 10 lines) ==="
+      printf "%s\n" "$SIG_ADDED" | sed -n '1,10p' || true
+      printf "%s\n" "$SIG_ADDED" | head -n 10 | od -An -t x1 | sed 's/^/ADDED_HEX: /' || true
+    fi
+    if [ -n "$(echo "$SIG_REMOVED" | tr -d '\n')" ]; then
+      echo "=== SIG_REMOVED (first 10 lines) ==="
+      printf "%s\n" "$SIG_REMOVED" | sed -n '1,10p' || true
+      printf "%s\n" "$SIG_REMOVED" | head -n 10 | od -An -t x1 | sed 's/^/REMOVED_HEX: /' || true
+    fi
+  fi
 
   if [ -z "$(echo "$SIG_ADDED" | tr -d '\n')" ] && [ -z "$(echo "$SIG_REMOVED" | tr -d '\n')" ]; then
     echo "Only insignificant whitespace/marker changes detected in staged diffs; reverting changes and skipping commit/push"
