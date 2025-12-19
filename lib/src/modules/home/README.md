@@ -1,0 +1,19 @@
+# home (Feature module)
+
+Short description: <write a short description here>.
+
+<!-- AUTO-GENERATED DOC START -->
+
+# home — Suggested documentation (automated)
+
+## Summary of changes
+The following files were changed in this module:
+- `presentation/screens/initial_screen.dart`
+- `presentation/widgets/floating_bottom_nav_bar.dart`
+
+## Suggested updates
+- Update the 'Implementation notes' and 'Main functionalities' sections if behavior changed.
+- Verify API and data-flow sections reflect field additions or removals.
+
+<!-- AUTO-GENERATED DOC END -->
+
