@@ -1,0 +1,111 @@
+name: MCP Documentation Agent
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
+  workflow_dispatch: {}
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check last commit message for automated runs
+        id: check_commit
+        run: |
+          LAST_MSG=$(git log -1 --pretty=%B)
+          echo "Last commit message: $LAST_MSG"
+          if echo "$LAST_MSG" | grep -q "docs(agent): automated update"; then
+            echo "Automated documentation commit detected; exiting to avoid loop.";
+            exit 0;
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install requests
+
+      # Flowchart (diagram left as reference)
+      # flowchart TD
+      #   A[Developer pushes commit → branch] --> B[GitHub Actions trigger\n(.github/workflows/mcp_doc_agent.yml)]
+      #   B --> C[Checkout repo & fetch origin/master]
+      #   C --> D{Is last commit an\nautomated-docs commit?}
+      #   D -- Yes --> E[Exit (avoid infinite loop)]
+      #   D -- No --> F[Compute diff vs origin/master\n(git diff --name-only)]
+      #   F --> G{Any changed files\nunder lib/src/modules/?}
+      #   G -- No --> H[Exit (nothing to update)]
+      #   G -- Yes --> I[Map changed files → affected modules]
+      #   I --> J[Run analysis & tests on affected modules\n(static checks, unit/widget tests (selective))]
+      #   J --> K{Tests & checks pass?}
+      #   K -- No --> L[Create Issue / post comment with analysis\n(attach failing test logs), STOP]
+      #   K -- Yes --> M[Call MCP LLM\n(provide prompt-template + diff + files + test output)]
+      #   M --> N[LLM returns doc updates + metadata\n(diff/markdown + confidence score)]
+      #   N --> O[Validate generated docs\n(markdownlint, mermaid syntax, secrets scan)]
+      #   O --> P{Docs valid and confidence ok?}
+      #   P -- No --> Q[Create Issue / post comment with suggested docs,\nflag for manual review, STOP]
+      #   P -- Yes --> R[Commit documents directly to the **same branch**\ncommit msg: "docs(agent): automated update for modules: ..."]
+      #   R --> S[Push commit → origin/current-branch]
+      #   S --> T[Workflow run triggered again; initial commit check prevents loop → EXIT SUCCESS]
+      #   
+      #   %% Optional fallback if low confidence
+      #   N -- low confidence --> U([OPTIONAL] Create Draft PR labeled \"auto-docs\" for manual review)
+      #   # Optional fallback if low confidence: create a Draft PR labeled "auto-docs" for manual review
+      #   # N -- low confidence --> U([OPTIONAL] Create Draft PR labeled "auto-docs" for manual review)
+      #   # U --> V[Human reviews & merges] --> T
+
+      - name: Install gh CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh
+
+      - name: Authenticate gh CLI (optional)
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if [ -n "${GH_TOKEN:-}" ]; then
+            echo "Authenticating gh CLI using GH_TOKEN secret"
+            echo "$GH_TOKEN" | gh auth login --with-token || true
+          else
+            echo "GH_TOKEN not set; skipping gh authentication"
+          fi
+
+      - name: Configure git to use AGENT_PUSH_TOKEN for pushes (optional)
+        env:
+          AGENT_PUSH_TOKEN: ${{ secrets.AGENT_PUSH_TOKEN }}
+        run: |
+          if [ -n "${AGENT_PUSH_TOKEN:-}" ]; then
+            echo "Configuring git remote to use AGENT_PUSH_TOKEN"
+            git remote set-url origin https://x-access-token:${AGENT_PUSH_TOKEN}@github.com/${{ github.repository }} || true
+          else
+            echo "AGENT_PUSH_TOKEN not set; runner will use default credentials"
+          fi
+
+      - name: Debug auth / git info (safe)
+        run: |
+          echo "git remote:" && git remote -v
+          echo "git user.name:" && git config user.name || true
+          echo "git user.email:" && git config user.email || true
+
+      - name: Run MCP Documentation Agent runner
+        env:
+          GITHUB_TOKEN: ${{ secrets.AGENT_PUSH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          chmod +x .github/scripts/doc_agent_runner.sh
+          .github/scripts/doc_agent_runner.sh

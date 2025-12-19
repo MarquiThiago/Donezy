@@ -105,3 +105,24 @@ if (now.difference(_lastStartTime!).inSeconds > 5) { // Altere aqui
 - **Controle do Router**: Router inicia o SplashBloc apenas quando necessário
 - **Singleton**: SplashBloc é injetado como singleton para manter estado
 - **Estados Freezed**: Código type-safe e imutável
+
+<!-- AUTO-GENERATED DOC START -->
+
+# splash_screen — Suggested documentation (automated)
+
+## Summary of changes
+The following files were changed in this module:
+- `blocs/splash_bloc/splash_event.dart`
+- `blocs/splash_bloc/splash_bloc.dart`
+- `blocs/splash_bloc/splash_state.dart`
+- `blocs/splash_bloc/splash_bloc.freezed.dart`
+- `presentation/pages/splash_screen.dart`
+
+## Suggested updates
+- Update the 'Implementation notes' and 'Main functionalities' sections if behavior changed.
+- Verify API and data-flow sections reflect field additions or removals.
+
+<!-- AUTO-GENERATED DOC END -->
+
+
+
