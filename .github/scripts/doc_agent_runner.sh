@@ -127,24 +127,42 @@ for module in "${UNIQUE_MODULES[@]}"; do
 
   README_PATH="lib/src/modules/$module/README.md"
   if git status --porcelain | grep -q "$README_PATH"; then
-    COMMIT_MSG="docs(agent): automated update for module: $module"
-    git add "$README_PATH"
-    # commit (if there are staged changes) and push explicitly to the branch
-    if git diff --staged --quiet; then
-      echo "No staged changes to commit for $module"
+    # Check whether changes are significant (ignore only Updated timestamp or AUTO-GENERATED markers)
+    DIFF_FULL=$(git diff --no-color -U0 "$README_PATH" || true)
+    ADDED_LINES=$(printf "%s" "$DIFF_FULL" | grep '^+' | sed 's/^+//')
+    REMOVED_LINES=$(printf "%s" "$DIFF_FULL" | grep '^-' | sed 's/^-//')
+
+    # Filter out common non-significant lines: Updated timestamp, auto markers, blank lines
+    SIG_ADDED=$(printf "%s" "$ADDED_LINES" | grep -v -E '^[[:space:]]*\*\*Updated:.*|^[[:space:]]*<!-- AUTO-GENERATED|^[[:space:]]*$' || true)
+    SIG_REMOVED=$(printf "%s" "$REMOVED_LINES" | grep -v -E '^[[:space:]]*\*\*Updated:.*|^[[:space:]]*<!-- AUTO-GENERATED|^[[:space:]]*$' || true)
+
+    if [ -z "$(echo "$SIG_ADDED" | tr -d '\n')" ] && [ -z "$(echo "$SIG_REMOVED" | tr -d '\n')" ]; then
+      echo "Only insignificant changes detected for $README_PATH; reverting file"
+      git checkout -- "$README_PATH"
     else
-      git commit -m "$COMMIT_MSG" || true
-      # Push explicitly to the current branch to avoid ambiguous ref errors
-      git push origin HEAD:refs/heads/$BRANCH_NAME || {
-        echo "Push failed for module $module"; git --no-pager log -1 --pretty=fuller || true
-      }
-      echo "Committed and pushed updates for module $module"
-      CHANGED_ANY=1
+      echo "Significant changes detected for $README_PATH; staging for batch commit"
+      CHANGED_READMES+=("$README_PATH")
     fi
   else
     echo "No README changes for $module after generator run"
   fi
 
 done
+
+# If there are any staged README changes collected, commit them in a single commit and push once
+if [ ${#CHANGED_READMES[@]} -ne 0 ]; then
+  echo "Staging README changes for modules: ${CHANGED_READMES[*]}"
+  git add "${CHANGED_READMES[@]}"
+  COMMIT_MSG="docs(agent): automated update for modules: $(printf "%s, " "${CHANGED_READMES[@]}" | sed 's/, $//')"
+  if git diff --staged --quiet; then
+    echo "Nothing staged after filtering; no commit necessary"
+  else
+    git commit -m "$COMMIT_MSG" || true
+    git push origin HEAD:refs/heads/$BRANCH_NAME || { echo "Batch push failed"; git --no-pager log -1 --pretty=fuller || true; }
+    echo "Committed and pushed batch updates for modules: ${CHANGED_READMES[*]}"
+  fi
+else
+  echo "No README changes to batch commit"
+fi
 
 echo "Runner finished"
