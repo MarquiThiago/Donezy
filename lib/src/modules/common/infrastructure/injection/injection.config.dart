@@ -41,7 +41,10 @@ import '../../../global/theme_mode/infrastructure/persist_theme_mode_service_imp
     as _i895;
 import '../../../note/domain/note_repository.dart' as _i70;
 import '../../../note/infrastructure/note_repository_impl.dart' as _i1011;
+import '../../../note/presentation/blocs/item_manager_bloc/item_manager_bloc.dart'
+    as _i220;
 import '../../../splash_screen/blocs/splash_bloc/splash_bloc.dart' as _i596;
+import '../../domain/models/user_uid.dart' as _i68;
 import '../firebase/firebase_injectable_modules.dart' as _i166;
 import 'external_modules.dart' as _i219;
 
@@ -88,6 +91,10 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.singleton<_i461.WatchThemeModeBloc>(
       () => _i461.WatchThemeModeBloc(gh<_i869.WatchThemeModeUsecase>()),
+    );
+    gh.factory<_i220.ItemManagerBloc>(
+      () =>
+          _i220.ItemManagerBloc(gh<_i68.UserUid>(), gh<_i70.NoteRepository>()),
     );
     gh.factory<_i946.SignInWithEmailAndPasswordUseCase>(
       () => _i946.SignInWithEmailAndPasswordUseCase(gh<_i254.AuthRepository>()),
