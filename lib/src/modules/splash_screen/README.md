@@ -105,3 +105,35 @@ if (now.difference(_lastStartTime!).inSeconds > 5) { // Altere aqui
 - **Controle do Router**: Router inicia o SplashBloc apenas quando necessário
 - **Singleton**: SplashBloc é injetado como singleton para manter estado
 - **Estados Freezed**: Código type-safe e imutável
+<!-- AUTO-GENERATED DOC START -->
+ # splash_screen Module
+
+The splash_screen module is responsible for managing the initial start-up screen of the application, displaying the company logo and other visual elements to provide an engaging user experience.
+
+## Architecture and component organization
+The module consists of several components organized as follows:
+
+1. **Blocs**: This folder contains the SplashBloc that manages the state and events for the splash screen.
+   - `splash_bloc.dart`: Contains the main SplashBloc class, managing the logic for initializing the application and changing states when necessary.
+   - `splash_event.dart`: Defines various events that can be emitted by the SplashBloc.
+   - `splash_state.dart`: Describes the different states the SplashBloc can have during its lifecycle.
+   - `splash_bloc.freezed.dart`: A Freezed implementation for type-safe and immutable objects.
+
+2. **presentation/pages**: This folder contains the `SplashScreen` widget, which displays the actual splash screen to the user.
+   - `splash_screen.dart`: The main entry point of this module, showing the visual elements for the initial start-up screen.
+
+## Key classes and their responsibilities
+- **SplashBloc**: Manages the state and events for the splash screen, including checking if the user is already logged in or not.
+- **SplashScreen**: A Flutter widget that displays the actual splash screen with company logo, onboarding information, and other visual elements.
+
+## Data flow and state management
+1. When the SplashBloc starts, it checks if the user is already logged in or not. If the user is already logged in, it will navigate to the main application screen. Otherwise, it continues with the onboarding process (if applicable).
+2. As events are emitted by other parts of the app (such as user login), the SplashBloc can respond accordingly and change its state. When the state changes, the `SplashScreen` will be rebuilt to reflect the new state.
+
+## How to use this module
+To use this module in your application:
+
+1. Import the necessary packages for BLoC, Flutter, Design System, and Common modules.
+2. Inject the SplashBloc as a singleton using your dependency injection framework of choice.
+3. Use the `SplashScreen` widget in your app to display the splash screen.
+<!-- AUTO-GENERATED DOC END -->
