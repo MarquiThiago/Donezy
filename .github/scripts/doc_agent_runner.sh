@@ -58,12 +58,40 @@ git config user.email "mcp-docs-bot@users.noreply.github.com"
 # Resolve current branch name robustly (supports workflow_dispatch, push, PR)
 BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD || true)"
 if [ -z "$BRANCH_NAME" ] || [ "$BRANCH_NAME" = "HEAD" ]; then
-  if [ -n "${GITHUB_REF:-}" ]; then
-    BRANCH_NAME="${GITHUB_REF##*/}"
-  elif [ -n "${GITHUB_HEAD_REF:-}" ]; then
+  if [ -n "${GITHUB_HEAD_REF:-}" ]; then
     BRANCH_NAME="${GITHUB_HEAD_REF}"
+  elif [ -n "${GITHUB_REF:-}" ]; then
+    # Use the last path segment for refs/heads/<branch> or handle refs/pull/<id>/merge
+    case "${GITHUB_REF}" in
+      refs/heads/*)
+        BRANCH_NAME="${GITHUB_REF##*/}"
+        ;;
+      refs/pull/*)
+        # For pull_request events GITHUB_HEAD_REF is normally available; fallback to 'merge' handling later
+        BRANCH_NAME="${GITHUB_REF##*/}"
+        ;;
+      *)
+        BRANCH_NAME="${GITHUB_REF##*/}"
+        ;;
+    esac
   else
     BRANCH_NAME="unknown-branch"
+  fi
+fi
+
+# If we ended up with 'merge' or 'unknown-branch' (detached HEAD), try to infer the branch from remote refs
+if [ "$BRANCH_NAME" = "merge" ] || [ "$BRANCH_NAME" = "unknown-branch" ]; then
+  REMOTE_BRANCH=$(git branch -r --contains HEAD | grep -v "origin/HEAD" | head -n1 | sed 's#origin/##' | sed 's#\s##g' || true)
+  if [ -n "$REMOTE_BRANCH" ]; then
+    BRANCH_NAME="$REMOTE_BRANCH"
+  else
+    # try name-rev as a last resort
+    NR=$(git name-rev --name-only HEAD 2>/dev/null || true)
+    if [ -n "$NR" ]; then
+      # strip possible 'origin/' prefix
+      NR=${NR#origin/}
+      BRANCH_NAME="$NR"
+    fi
   fi
 fi
 
