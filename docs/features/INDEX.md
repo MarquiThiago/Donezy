@@ -7,11 +7,11 @@ This index lists features (modules under `lib/src/modules/`) and points to their
 ## Features
 
 - **auth** — [README](../../lib/src/modules/auth/README.md)
-- **common** — `lib/src/modules/common/` — *No module README yet*
+- **common** — [README](../../lib/src/modules/common/README.md)
 - **global** — `lib/src/modules/global/` — *No module README yet*
-- **home** — `lib/src/modules/home/` — *No module README yet*
-- **note** — `lib/src/modules/note/` — *No module README yet*
-- **profile** — `lib/src/modules/profile/` — *No module README yet*
+- **home** — [README](../../lib/src/modules/home/README.md)
+- **note** — [README](../../lib/src/modules/note/README.md)
+- **profile** — [README](../../lib/src/modules/profile/README.md)
 - **splash_screen** — [README](../../lib/src/modules/splash_screen/README.md)
 - **task** — [README](../../lib/src/modules/task/README.md)
 
