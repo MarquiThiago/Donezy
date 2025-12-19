@@ -197,8 +197,21 @@ if [ ${#CHANGED_READMES[@]} -ne 0 ]; then
   # Stage the README changes and commit on the branch we've just checked out (or the branch we were already on)
   git add "${CHANGED_READMES[@]}"
   COMMIT_MSG="docs(agent): automated update for modules: $(printf "%s, " "${CHANGED_READMES[@]}" | sed 's/, $//')"
-  if git diff --staged --quiet; then
-    echo "Nothing staged after filtering; no commit necessary"
+
+  # Inspect the staged diff for significance: ignore blank lines, AUTO-GENERATED markers and Updated timestamps
+  STAGED_DIFF=$(git diff --staged -U0 -- "${CHANGED_READMES[@]}" || true)
+  ADDED_LINES=$(printf "%s" "$STAGED_DIFF" | grep '^+' | sed 's/^+//')
+  REMOVED_LINES=$(printf "%s" "$STAGED_DIFF" | grep '^-' | sed 's/^-//')
+
+  # Normalize by trimming whitespace and filter out insignificant patterns
+  SIG_ADDED=$(printf "%s" "$ADDED_LINES" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' | grep -v -E '^$|^\*\*Updated:.*|^<!-- AUTO-GENERATED|^<!--' || true)
+  SIG_REMOVED=$(printf "%s" "$REMOVED_LINES" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' | grep -v -E '^$|^\*\*Updated:.*|^<!-- AUTO-GENERATED|^<!--' || true)
+
+  if [ -z "$(echo "$SIG_ADDED" | tr -d '\n')" ] && [ -z "$(echo "$SIG_REMOVED" | tr -d '\n')" ]; then
+    echo "Only insignificant whitespace/marker changes detected in staged diffs; reverting changes and skipping commit/push"
+    # Unstage and revert working-tree changes for these READMEs
+    git restore --staged "${CHANGED_READMES[@]}" || git reset HEAD -- "${CHANGED_READMES[@]}" || true
+    git checkout -- "${CHANGED_READMES[@]}" || true
   else
     git commit -m "$COMMIT_MSG" || true
 
