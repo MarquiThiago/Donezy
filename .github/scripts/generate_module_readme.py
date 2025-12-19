@@ -40,23 +40,27 @@ def update_readme(module: str, module_path: Path, auto_content: str | None = Non
     if readme.exists():
         text = readme.read_text(encoding="utf-8")
         if MARKER_START in text and MARKER_END in text:
+            # Replace existing auto-generated block
             before, rest = text.split(MARKER_START, 1)
             _, after = rest.split(MARKER_END, 1)
-            new_text = before + auto + after
+            # Ensure proper spacing: before section should end with newline, after section should start with newline
+            before_part = before.rstrip() + "\n" if before.strip() else ""
+            after_part = "\n" + after.lstrip() if after.strip() else ""
+            new_text = before_part + auto + after_part
             readme.write_text(new_text, encoding="utf-8")
             print(f"Updated auto-generated block in {readme}")
             return True
         else:
-            # Append auto section
-            new_text = text.rstrip() + "\n\n" + auto + "\n"
+            # Append auto section when markers don't exist yet
+            text_stripped = text.rstrip()
+            new_text = text_stripped + "\n\n" + auto + "\n"
             readme.write_text(new_text, encoding="utf-8")
             print(f"Appended auto-generated block to {readme}")
             return True
     else:
         # Create a new README with a short human header and auto block
-        human_header = f"# {module} (Feature module)\n\n" \
-                       "Short description: <write a short description here>.\n\n"
-        new_text = human_header + auto + "\n"
+        human_header = f"# {module} (Feature module)\n\nShort description: <write a short description here>.\n"
+        new_text = human_header + "\n" + auto + "\n"
         module_path.mkdir(parents=True, exist_ok=True)
         readme.write_text(new_text, encoding="utf-8")
         print(f"Created new README at {readme}")
