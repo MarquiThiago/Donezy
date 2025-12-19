@@ -89,8 +89,8 @@ def main():
         except Exception as e:
             print(f"LLM call failed: {e}", file=sys.stderr)
 
-    # Fallback
-    out = local_fallback(module, files, args.diff)
+    # Fallback (use computed diff variable)
+    out = local_fallback(module, files, diff)
     print(json.dumps(out))
 
 
