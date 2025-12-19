@@ -51,6 +51,24 @@ fi
 
 REPO_ROOT=$(pwd)
 
+# Ensure commits have a consistent identity
+git config user.name "MCP Documentation Agent"
+git config user.email "mcp-docs-bot@users.noreply.github.com"
+
+# Resolve current branch name robustly (supports workflow_dispatch, push, PR)
+BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD || true)"
+if [ -z "$BRANCH_NAME" ] || [ "$BRANCH_NAME" = "HEAD" ]; then
+  if [ -n "${GITHUB_REF:-}" ]; then
+    BRANCH_NAME="${GITHUB_REF##*/}"
+  elif [ -n "${GITHUB_HEAD_REF:-}" ]; then
+    BRANCH_NAME="${GITHUB_HEAD_REF}"
+  else
+    BRANCH_NAME="unknown-branch"
+  fi
+fi
+
+echo "Operating on branch: $BRANCH_NAME"
+
 for module in "${UNIQUE_MODULES[@]}"; do
   echo "Processing module: $module"
 
@@ -83,9 +101,18 @@ for module in "${UNIQUE_MODULES[@]}"; do
   if git status --porcelain | grep -q "$README_PATH"; then
     COMMIT_MSG="docs(agent): automated update for module: $module"
     git add "$README_PATH"
-    git commit -m "$COMMIT_MSG" || true
-    git push origin HEAD || true
-    echo "Committed and pushed updates for module $module"
+    # commit (if there are staged changes) and push explicitly to the branch
+    if git diff --staged --quiet; then
+      echo "No staged changes to commit for $module"
+    else
+      git commit -m "$COMMIT_MSG" || true
+      # Push explicitly to the current branch to avoid ambiguous ref errors
+      git push origin HEAD:refs/heads/$BRANCH_NAME || {
+        echo "Push failed for module $module"; git --no-pager log -1 --pretty=fuller || true
+      }
+      echo "Committed and pushed updates for module $module"
+      CHANGED_ANY=1
+    fi
   else
     echo "No README changes for $module after generator run"
   fi
