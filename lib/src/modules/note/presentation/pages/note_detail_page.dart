@@ -35,10 +35,10 @@ class NoteDetailPage extends StatelessWidget {
               Text(
                 title,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              DSBoxSpace.medium(),
+              DSBoxSpace(),
 
               // Created Date
               Row(
@@ -54,21 +54,18 @@ class NoteDetailPage extends StatelessWidget {
               DSBoxSpace.large(),
 
               // Divider
-              DSDivider.fullWidth(),
+              DSDivider(),
               DSBoxSpace.large(),
 
               // Note Description
               Text(
                 'Description',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
-              DSBoxSpace.medium(),
-              Text(
-                description,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              DSBoxSpace(),
+              Text(description, style: Theme.of(context).textTheme.bodyMedium),
               DSBoxSpace.xxxLarge(),
 
               // Action Buttons
@@ -78,7 +75,9 @@ class NoteDetailPage extends StatelessWidget {
                     child: ElevatedButton.icon(
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Edit functionality coming soon')),
+                          const SnackBar(
+                            content: Text('Edit functionality coming soon'),
+                          ),
                         );
                       },
                       icon: const Icon(Icons.edit),
@@ -90,7 +89,9 @@ class NoteDetailPage extends StatelessWidget {
                     child: ElevatedButton.icon(
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Delete functionality coming soon')),
+                          const SnackBar(
+                            content: Text('Delete functionality coming soon'),
+                          ),
                         );
                       },
                       icon: const Icon(Icons.delete),
