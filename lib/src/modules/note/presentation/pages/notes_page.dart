@@ -31,9 +31,11 @@ class NotesPage extends StatelessWidget {
               separatorBuilder: (context, index) => DSBoxSpace.small(),
               itemCount: 20,
               itemBuilder: (context, index) => ItemCard(
-                title: 'Note Title',
+                noteId: 'note_$index',
+                title: 'Note Title ${index + 1}',
                 description:
                     'This is a brief description of the note content. It provides an overview of what the note is about.',
+                createdAt: DateTime.now().subtract(Duration(days: index)),
               ),
             ),
           ),
