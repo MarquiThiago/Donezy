@@ -1,7 +1,6 @@
 # profile (Feature module)
 
 Short description: <write a short description here>.
-
 <!-- AUTO-GENERATED DOC START -->
 
 # profile — Suggested documentation (automated)
@@ -16,13 +15,3 @@ The following files were changed in this module:
 - Verify API and data-flow sections reflect field additions or removals.
 
 <!-- AUTO-GENERATED DOC END -->
-
-
-
-
-
-
-
-
-
-
