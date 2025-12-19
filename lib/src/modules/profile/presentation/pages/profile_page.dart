@@ -37,14 +37,6 @@ class ProfilePage extends StatelessWidget {
             SignOutTile(),
             DSDivider.shrinkWraped(),
             ThemeSwitcherButton(),
-
-            DSBoxSpace.xxxLarge(),
-            Center(
-              child: Text(
-                "DONEZY",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-            ),
           ],
         ),
       ),
