@@ -6,15 +6,13 @@ import 'package:donezy_app/src/modules/common/domain/failure/failure.dart';
 import 'package:donezy_app/src/modules/common/domain/models/note.dart';
 import 'package:donezy_app/src/modules/common/domain/models/note_request.dart';
 import 'package:donezy_app/src/modules/common/domain/models/user_uid.dart';
-import 'package:donezy_app/src/modules/common/infrastructure/dto/note_request_dto.dart';
+import 'package:donezy_app/src/modules/common/infrastructure/dto/request_note/note_request_dto.dart';
 import 'package:donezy_app/src/modules/common/infrastructure/exception_handle.dart';
 import 'package:donezy_app/src/modules/common/infrastructure/firebase/firestore_extension.dart';
 import 'package:donezy_app/src/modules/common/infrastructure/firebase/firestore_helpers/all_notes_firestore_helper.dart';
 import 'package:donezy_app/src/modules/common/infrastructure/firebase/firestore_helpers/note_firestore_helper.dart';
 import 'package:donezy_app/src/modules/note/domain/note_repository.dart';
-import 'package:injectable/injectable.dart';
 
-@LazySingleton(as: NoteRepository)
 class NoteRepositoryImpl implements NoteRepository {
   NoteRepositoryImpl(this._firestore);
 
