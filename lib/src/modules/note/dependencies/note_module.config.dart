@@ -56,8 +56,10 @@ import 'package:donezy_app/src/modules/note/presentation/blocs/item_manager_bloc
     as _i283;
 import 'package:donezy_app/src/modules/note/presentation/blocs/watch_notes_bloc/watch_notes_bloc.dart'
     as _i904;
-import 'package:donezy_app/src/modules/splash_screen/blocs/splash_bloc/splash_bloc.dart'
+import 'package:donezy_app/src/modules/splash_screen/presentation/blocs/splash_bloc/splash_bloc.dart'
     as _i98;
+import 'package:donezy_app/src/modules/splash_screen/dependencies/splash_module.dart'
+    as _i349;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -73,6 +75,7 @@ extension GetItInjectableX on _i174.GetIt {
     final externalModules = _$ExternalModules();
     final noteModule = _$NoteModule();
     final firebaseInjectableModules = _$FirebaseInjectableModules();
+    final splashModule = _$SplashModule();
     final authModule = _$AuthModule();
     await gh.factoryAsync<_i460.SharedPreferences>(
       () => externalModules.prefs,
@@ -82,7 +85,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i59.FirebaseAuth>(
       () => firebaseInjectableModules.firebaseAuth,
     );
-    gh.singleton<_i98.SplashBloc>(() => _i98.SplashBloc());
+    gh.singleton<_i98.SplashBloc>(() => splashModule.splashBloc());
     gh.lazySingleton<_i974.FirebaseFirestore>(
       () => firebaseInjectableModules.firestore,
     );
@@ -93,10 +96,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => noteModule.watchNotesBloc(gh<_i303.UserUid>()),
     );
     gh.factory<_i283.ItemManagerBloc>(
-      () => _i283.ItemManagerBloc(
-        gh<_i303.UserUid>(),
-        gh<_i259.NoteRepository>(),
-      ),
+      () => noteModule.itemManagerBloc(gh<_i303.UserUid>()),
     );
     gh.singleton<_i87.AuthRepository>(
       () => authModule.authRepository(
@@ -151,5 +151,7 @@ class _$ExternalModules extends _i352.ExternalModules {}
 class _$NoteModule extends _i745.NoteModule {}
 
 class _$FirebaseInjectableModules extends _i900.FirebaseInjectableModules {}
+
+class _$SplashModule extends _i349.SplashModule {}
 
 class _$AuthModule extends _i117.AuthModule {}

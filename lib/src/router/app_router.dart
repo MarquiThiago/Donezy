@@ -5,7 +5,7 @@ import 'package:donezy_app/src/modules/home/presentation/screens/initial_screen.
 import 'package:donezy_app/src/modules/note/presentation/pages/create_item_page.dart';
 import 'package:donezy_app/src/modules/note/presentation/pages/notes_page.dart';
 import 'package:donezy_app/src/modules/profile/presentation/pages/profile_page.dart';
-import 'package:donezy_app/src/modules/splash_screen/blocs/splash_bloc/splash_bloc.dart';
+import 'package:donezy_app/src/modules/splash_screen/presentation/blocs/splash_bloc/splash_bloc.dart';
 import 'package:donezy_app/src/modules/splash_screen/presentation/pages/splash_screen.dart';
 import 'package:donezy_app/src/modules/task/presentation/pages/task_page.dart';
 import 'package:donezy_app/src/router/app_routes.dart';

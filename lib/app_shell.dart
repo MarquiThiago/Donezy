@@ -6,7 +6,7 @@ import 'package:donezy_app/src/modules/auth/blocs/watch_auth_bloc/watch_auth_blo
 import 'package:donezy_app/src/modules/common/infrastructure/injection/injection.dart';
 import 'package:donezy_app/src/modules/global/theme_mode/blocs/set_theme_mode/set_theme_mode_bloc.dart';
 import 'package:donezy_app/src/modules/global/theme_mode/blocs/watch_theme_mode/watch_theme_mode_bloc.dart';
-import 'package:donezy_app/src/modules/splash_screen/blocs/splash_bloc/splash_bloc.dart';
+import 'package:donezy_app/src/modules/splash_screen/presentation/blocs/splash_bloc/splash_bloc.dart';
 import 'package:donezy_app/src/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

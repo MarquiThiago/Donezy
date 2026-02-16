@@ -1,17 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:injectable/injectable.dart';
 
 part 'splash_event.dart';
 part 'splash_state.dart';
 part 'splash_bloc.freezed.dart';
 
-@singleton
 class SplashBloc extends Bloc<SplashEvent, SplashState> {
-  static bool _isFirstRun = true;
-  static bool _hasCompletedSplash = false;
-  static DateTime? _lastStartTime;
-
   SplashBloc() : super(const SplashState.initial()) {
     on<SplashEvent>(
       (event, emit) => switch (event) {
@@ -21,6 +15,10 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       },
     );
   }
+
+  static bool _isFirstRun = true;
+  static bool _hasCompletedSplash = false;
+  static DateTime? _lastStartTime;
 
   void _onSplashStarted(_SplashStarted event, Emitter<SplashState> emit) async {
     final now = DateTime.now();

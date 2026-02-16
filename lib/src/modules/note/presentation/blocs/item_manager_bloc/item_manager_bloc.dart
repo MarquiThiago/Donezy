@@ -5,13 +5,11 @@ import 'package:donezy_app/src/modules/common/domain/models/user_uid.dart';
 import 'package:donezy_app/src/modules/note/domain/note_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:injectable/injectable.dart';
 
 part 'item_manager_event.dart';
 part 'item_manager_state.dart';
 part 'item_manager_bloc.freezed.dart';
 
-@injectable
 class ItemManagerBloc extends Bloc<ItemManagerEvent, ItemManagerState> {
   ItemManagerBloc(this._userUid, this._noteRepository)
     : super(const ItemManagerState.initial()) {

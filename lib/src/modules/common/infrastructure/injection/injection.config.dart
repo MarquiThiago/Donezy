@@ -45,7 +45,9 @@ import '../../../note/presentation/blocs/item_manager_bloc/item_manager_bloc.dar
     as _i220;
 import '../../../note/presentation/blocs/watch_notes_bloc/watch_notes_bloc.dart'
     as _i428;
-import '../../../splash_screen/blocs/splash_bloc/splash_bloc.dart' as _i596;
+import '../../../splash_screen/presentation/blocs/splash_bloc/splash_bloc.dart'
+    as _i596;
+import '../../../splash_screen/dependencies/splash_module.dart' as _i253;
 import '../../domain/models/user_uid.dart' as _i68;
 import '../firebase/firebase_injectable_modules.dart' as _i166;
 import 'external_modules.dart' as _i219;
@@ -60,6 +62,7 @@ extension GetItInjectableX on _i174.GetIt {
     final externalModules = _$ExternalModules();
     final noteModule = _$NoteModule();
     final firebaseInjectableModules = _$FirebaseInjectableModules();
+    final splashModule = _$SplashModule();
     final authModule = _$AuthModule();
     await gh.factoryAsync<_i460.SharedPreferences>(
       () => externalModules.prefs,
@@ -69,7 +72,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i59.FirebaseAuth>(
       () => firebaseInjectableModules.firebaseAuth,
     );
-    gh.singleton<_i596.SplashBloc>(() => _i596.SplashBloc());
+    gh.singleton<_i596.SplashBloc>(() => splashModule.splashBloc());
     gh.lazySingleton<_i974.FirebaseFirestore>(
       () => firebaseInjectableModules.firestore,
     );
@@ -80,8 +83,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => noteModule.watchNotesBloc(gh<_i68.UserUid>()),
     );
     gh.factory<_i220.ItemManagerBloc>(
-      () =>
-          _i220.ItemManagerBloc(gh<_i68.UserUid>(), gh<_i70.NoteRepository>()),
+      () => noteModule.itemManagerBloc(gh<_i68.UserUid>()),
     );
     gh.singleton<_i254.AuthRepository>(
       () => authModule.authRepository(
@@ -137,5 +139,7 @@ class _$ExternalModules extends _i219.ExternalModules {}
 class _$NoteModule extends _i783.NoteModule {}
 
 class _$FirebaseInjectableModules extends _i166.FirebaseInjectableModules {}
+
+class _$SplashModule extends _i253.SplashModule {}
 
 class _$AuthModule extends _i86.AuthModule {}
