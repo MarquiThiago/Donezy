@@ -3,13 +3,11 @@ import 'package:donezy_app/src/modules/common/domain/failure/failure.dart';
 import 'package:donezy_app/src/modules/common/domain/models/user_uid.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:injectable/injectable.dart';
 
 part 'sign_in_event.dart';
 part 'sign_in_state.dart';
 part 'sign_in_bloc.freezed.dart';
 
-@injectable
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
   SignInBloc(this._signInWithEmailAndPasswordUseCase)
     : super(const SignInState.initial()) {

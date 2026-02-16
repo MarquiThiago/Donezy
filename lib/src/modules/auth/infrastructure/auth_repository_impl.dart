@@ -8,7 +8,7 @@ import 'package:donezy_app/src/modules/common/domain/const/common_domain_const.d
 import 'package:donezy_app/src/modules/common/domain/failure/failure.dart';
 import 'package:donezy_app/src/modules/common/domain/models/user.dart';
 import 'package:donezy_app/src/modules/common/domain/models/user_uid.dart';
-import 'package:donezy_app/src/modules/common/infrastructure/dto/user_dto.dart';
+import 'package:donezy_app/src/modules/common/infrastructure/dto/user/user_dto.dart';
 import 'package:donezy_app/src/modules/common/infrastructure/exception/custom_exception.dart';
 import 'package:donezy_app/src/modules/common/infrastructure/exception/custom_exception_code.dart';
 import 'package:donezy_app/src/modules/common/infrastructure/exception_handle.dart';
@@ -17,9 +17,7 @@ import 'package:donezy_app/src/modules/common/infrastructure/firebase/firestore_
 import 'package:firebase_auth/firebase_auth.dart'
     as firebase_auth
     show FirebaseAuth;
-import 'package:injectable/injectable.dart';
 
-@Singleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._firebaseAuth, this._firestore) {
     unawaited(_init());

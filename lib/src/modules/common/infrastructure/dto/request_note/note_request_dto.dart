@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../domain/models/note_request.dart';
+import '../../../domain/models/note_request.dart';
 
 part 'note_request_dto.freezed.dart';
 part 'note_request_dto.g.dart';

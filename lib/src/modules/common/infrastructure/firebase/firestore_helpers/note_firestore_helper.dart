@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:donezy_app/src/modules/common/domain/failure/failure.dart';
 import 'package:donezy_app/src/modules/common/domain/models/note.dart';
-import 'package:donezy_app/src/modules/common/infrastructure/dto/note_dto.dart';
+import 'package:donezy_app/src/modules/common/infrastructure/dto/notes/note_dto.dart';
 import 'package:donezy_app/src/modules/common/infrastructure/exception/global_exception_handle.dart';
 
 class NoteFirestoreHelpers {

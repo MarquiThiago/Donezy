@@ -1,3 +1,5 @@
+import 'package:donezy_app/src/modules/common/domain/failure/failure.dart';
+import 'package:donezy_app/src/modules/common/domain/models/note.dart';
 import 'package:donezy_app/src/modules/common/domain/models/note_request.dart';
 import 'package:donezy_app/src/modules/common/domain/models/user_uid.dart';
 import 'package:donezy_app/src/modules/note/domain/note_repository.dart';

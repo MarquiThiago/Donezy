@@ -1,8 +1,8 @@
 import 'package:design_system/design_system_export.dart';
 import 'package:donezy_app/src/modules/common/domain/const/const_strings.dart';
-import 'package:donezy_app/src/modules/note/presentation/blocs/item_manager_bloc/item_manager_bloc.dart';
+import 'package:donezy_app/src/modules/common/presentation/widgets/bottom_sheet_template.dart';
+import 'package:donezy_app/src/modules/note/presentation/pages/create_item_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class FloatingBottomNavBar extends StatelessWidget {
@@ -55,26 +55,24 @@ class FloatingBottomNavBar extends StatelessWidget {
           ),
         ),
         DSBoxSpace(),
-        Container(
-          padding: EdgeInsets.all(DSSpace.medium),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(DSSpace.xLarge),
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: Colors.black45,
-            //     blurRadius: 25,
-            //     offset: const Offset(0, 10),
-            //   ),
-            // ],
-          ),
+        Material(
+          color: Theme.of(
+            context,
+          ).colorScheme.primary, // Define a cor de fundo para o Material
+          borderRadius: BorderRadius.circular(DSSpace.xLarge),
           child: InkWell(
-            onTap: () => context.read<ItemManagerBloc>().add(
-              const ItemManagerEvent.add('New note', 'this is a test note'),
+            borderRadius: BorderRadius.circular(DSSpace.xLarge),
+            splashColor: Theme.of(context).colorScheme.secondary,
+            onTap: () => BottomSheetTemplate.showBottomSheet(
+              context,
+              child: const CreateItemPage(),
             ),
-            child: Icon(
-              Icons.add,
-              color: Theme.of(context).colorScheme.onPrimary,
+            child: Padding(
+              padding: const EdgeInsets.all(DSSpace.medium),
+              child: Icon(
+                Icons.add,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
             ),
           ),
         ),

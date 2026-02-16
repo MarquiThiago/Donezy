@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:donezy_app/src/modules/common/domain/failure/failure.dart';
 import 'package:donezy_app/src/modules/common/domain/models/user.dart';
-import 'package:donezy_app/src/modules/common/infrastructure/dto/user_dto.dart';
+import 'package:donezy_app/src/modules/common/infrastructure/dto/user/user_dto.dart';
 import 'package:donezy_app/src/modules/common/infrastructure/exception/global_exception_handle.dart';
 
 class UserFirestoreHelpers {

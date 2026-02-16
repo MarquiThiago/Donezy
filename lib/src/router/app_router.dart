@@ -2,6 +2,7 @@ import 'package:donezy_app/src/modules/auth/blocs/watch_auth_bloc/watch_auth_blo
 import 'package:donezy_app/src/modules/auth/presentation/auth_screen.dart';
 import 'package:donezy_app/src/modules/common/infrastructure/bloc_converter/stream_to_listenable.dart';
 import 'package:donezy_app/src/modules/home/presentation/screens/initial_screen.dart';
+import 'package:donezy_app/src/modules/note/presentation/pages/create_item_page.dart';
 import 'package:donezy_app/src/modules/note/presentation/pages/notes_page.dart';
 import 'package:donezy_app/src/modules/profile/presentation/pages/profile_page.dart';
 import 'package:donezy_app/src/modules/splash_screen/blocs/splash_bloc/splash_bloc.dart';
@@ -51,6 +52,10 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.initial,
         builder: (context, state) => const InitialScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.createItemPage,
+        builder: (context, state) => const CreateItemPage(),
       ),
     ];
   }
