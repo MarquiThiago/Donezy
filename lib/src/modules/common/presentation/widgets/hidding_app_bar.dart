@@ -20,14 +20,21 @@ class HideAppBar extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverAppBar(
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: DSSpace.medium),
+              child: IconButton(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(Icons.search),
+              ),
+            ),
+          ],
           floating: floating,
           centerTitle: centerTitle,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          stretch: true,
-          title: Padding(
-            padding: const EdgeInsets.only(bottom: DSSpace.large),
-            child: Text(title, style: Theme.of(context).textTheme.titleMedium),
-          ),
+          stretch: false,
+          toolbarHeight: kToolbarHeight,
+          title: Text(title, style: Theme.of(context).textTheme.titleMedium),
         ),
         SliverToBoxAdapter(child: widget),
       ],

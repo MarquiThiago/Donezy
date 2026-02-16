@@ -17,7 +17,7 @@ class ItemCard extends StatelessWidget {
     required this.title,
     required this.description,
     this.isTask = true,
-    this.isSelected = true,
+    this.isSelected = false,
     this.onSelected,
     required this.createdAt,
   });

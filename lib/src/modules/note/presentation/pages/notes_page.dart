@@ -27,38 +27,37 @@ class NotesPage extends StatelessWidget {
       child: Scaffold(
         body: HideAppBar(
           title: ConstStrings.notes,
-          widget: SingleChildScrollView(
-            child: BlocBuilder<WatchNotesBloc, WatchNotesState>(
-              builder: (context, state) => switch (state) {
-                WatchNotesInitial() => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                WatchNotesLoading() => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                WatchNotesFailure(failure: final failure) => Center(
-                  child: Text('Error: ${failure.toString()}'),
-                ),
-                WatchNotesSuccess(notes: final notes) => ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  separatorBuilder: (context, index) => DSBoxSpace.small(),
-                  itemCount: notes.length,
-                  itemBuilder: (context, index) {
-                    if (notes.isEmpty) {
-                      return const Center(child: Text('No notes available.'));
-                    }
-                    final note = notes[index];
-                    return ItemCard(
-                      noteId: note.uid,
-                      title: note.title,
-                      description: note.content,
-                      createdAt: note.dateCreated,
-                    );
-                  },
-                ),
-              },
-            ),
+          widget: BlocBuilder<WatchNotesBloc, WatchNotesState>(
+            builder: (context, state) => switch (state) {
+              WatchNotesInitial() => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              WatchNotesLoading() => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              WatchNotesFailure(failure: final failure) => Center(
+                child: Text('Error: ${failure.toString()}'),
+              ),
+              WatchNotesSuccess(notes: final notes) => ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                separatorBuilder: (context, index) => DSBoxSpace.small(),
+                itemCount: notes.length,
+                itemBuilder: (context, index) {
+                  if (notes.isEmpty) {
+                    return const Center(child: Text('No notes available.'));
+                  }
+                  final note = notes[index];
+                  return ItemCard(
+                    noteId: note.uid,
+                    title: note.title,
+                    description: note.content,
+                    createdAt: note.dateCreated,
+                    onSelected: () {},
+                  );
+                },
+              ),
+            },
           ),
         ),
       ),
